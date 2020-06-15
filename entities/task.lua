@@ -60,7 +60,7 @@ function Task:getTitle()
     return self.title
 end
 
----@param title
+---@param title string
 function Task:setTitle(title)
 
     self.title = title
