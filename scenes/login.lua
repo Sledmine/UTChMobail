@@ -6,7 +6,7 @@
 local composer = require("composer")
 local widget = require("widget")
 
-local utchVirtual = require("utils.utchVirtual")
+local utchVirtual = require("lib.utchVirtual")
 
 local scene = composer.newScene()
 
@@ -23,7 +23,7 @@ local function tasksCallback(studentsTasks)
         }
     }
     print(inspect(studentsTasks))
-    sceneController.setScene("scenes.tasksView", options)
+    --sceneController.setScene("scenes.tasksView", options)
 end
 
 local function loginCallback()

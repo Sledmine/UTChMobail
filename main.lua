@@ -3,7 +3,7 @@
 -- Author: Sledmine
 -- Main entry for the application
 ------------------------------------------------------------------------------
-sceneController = require('utils.sceneController')
+sceneController = require('lib.sceneController')
 
 inspect = require("inspect")
 
