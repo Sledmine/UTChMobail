@@ -7,7 +7,7 @@ local scene = composer.newScene()
 function scene:create( event )
     local sceneGroup = self.view
 
-    background = display.newImageRect("img/mainMenuBackground.png", display.actualContentWidth, display.actualContentHeight)
+    background = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 

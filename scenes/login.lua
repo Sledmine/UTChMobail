@@ -2,23 +2,20 @@ local composer = require("composer")
 local widget = require("widget")
 
 local scene = composer.newScene()
-local user
-local pass
-local button
 
 function scene:create(event)
     local sceneGroup = self.view
 
-    background = display.newImageRect("img/loginBackground.png", display.actualContentWidth, display.actualContentHeight)
+    local background = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
-    user = native.newTextBox(display.contentCenterX, display.contentCenterY - 60, display.actualContentWidth - 90, 40)
+    local user = native.newTextBox(display.contentCenterX, display.contentCenterY - 60, display.actualContentWidth - 90, 40)
     user.isEditable = true
     user.size = 20
     user.placeholder = "Usuario"
 
-    pass = native.newTextBox(display.contentCenterX, user.y + 70, display.actualContentWidth - 90, 40) 
+    local pass = native.newTextBox(display.contentCenterX, user.y + 70, display.actualContentWidth - 90, 40) 
     pass.isEditable = true
     pass.size = 20
     pass.placeholder = "Contraseña"
@@ -29,15 +26,14 @@ function scene:create(event)
             print(user.test)
             -- reemplazar por usuario de virtual
                 local options = {
-                    effect = "slideRight",
-                    time = 400,
-                    params = {}
+                    effect = "slideDown",
+                    time = 400
                 }
                 composer.gotoScene("scenes.mainMenu", options)
         end
     end
 
-    button = widget.newButton({
+    local button = widget.newButton({
         x = pass.x, 
         y = pass.y + 80, 
         label = "Login",
@@ -92,8 +88,6 @@ end
 -- destroy()
 function scene:destroy(event)
     local sceneGroup = self.view
-    pass:removeSelf()
-    user:removeSelf()
 end
 
 -- -----------------------------------------------------------------------------------
