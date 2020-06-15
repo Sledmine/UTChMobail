@@ -11,44 +11,35 @@ function scene:create( event )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
-    -- Preparing the number of pixels for the max scrollableHeight
-    local cards = {1,2,3,4]
-    local tasks = {title="Tarea x", status="entrega mañana", deadline="12:00"}
-    local scrollableHeight = (150 * #cards) + (20 * #cards)
+    local cards = {1,2,3,4,5,6}
 
-    -- Scrollview for the incoming information --
-    local scroll = widget.newScrollView({
+    -- Creation of the tableView containing the student tasks
+    local function onRowRender(event)
+        local row = event.row
+        local rowHeight = row.actualContentHeight
+        local rowWidth = row.actualContentWidth
+
+        local rowInfo = display.newText( row, "Tarea " .. row.index, 0, 0, nil, 16 )
+        rowInfo:setFillColor( 0 )
+        rowInfo.anchorX = 0
+        rowInfo.x = 20
+        rowInfo.y = 20
+    end
+
+    local tableView = widget.newTableView({
         x = display.contentCenterX,
         y = display.contentCenterY,
         width = display.actualContentWidth,
-        height = display.actualContentHeight,
-        scrollHeight = scrollableHeight,
-        horizontalScrollDisabled = true,
-        bottomPadding = 16,
+        heigth = display.actualContentHeight,
+        onRowRender = onRowRender,
         hideBackground = true
-        }
-    )
+    })
 
-    -- Algorithm for displaying the number of cards
-    offset = display.contentCenterY - 190
-    for i=1,#cards do
-        cards[i] = display.newRoundedRect(display.contentCenterX, offset, display.actualContentWidth - 50, 150, 16)
-        cards[i]:setFillColor(color.hex("FDF4FE"));
-        -- This is the incoming task title
-        tasks[i] = display.newText(
-            {
-                parent = cards[i],
-                x = cards[i].x - 90,
-                y = cards[i].y - 50,
-                text = tasks["title"],
-                font = native.systemFont,
-                fontSize = 18
-            }
-        )
-        tasks[i]:setFillColor(color.hex("000000"))
-        scroll:insert(cards[i])
-        scroll:insert(tasks[i])
-        offset = offset + 170
+    for i = 1, #cards do
+        tableView:insertRow{
+            rowColor = { default={color.hex("FDF4FE")}},
+            rowHeight = 150
+        }
     end
 
 end
