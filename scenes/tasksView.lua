@@ -12,10 +12,11 @@ function scene:create( event )
     background.y = display.contentCenterY
 
     -- Preparing the number of pixels for the max scrollableHeight
-    local cards ={1,2,3,4,5}
+    local cards = {1,2,3,4}
+    local tasks = {title="Tarea x", status="entrega mañana", deadline="12:00"}
     local scrollableHeight = (150 * #cards) + (20 * #cards)
 
-    -- Scrollview for the incoming information -- 
+    -- Scrollview for the incoming information --
     local scroll = widget.newScrollView({
         x = display.contentCenterX,
         y = display.contentCenterY,
@@ -31,9 +32,22 @@ function scene:create( event )
     -- Algorithm for displaying the number of cards
     offset = display.contentCenterY - 190
     for i=1,#cards do
-        cards[i] = display.newRect(display.contentCenterX, offset, display.actualContentWidth - 90, 150)
-        cards[i]:setFillColor(color.hex("CCCCCC"));
+        cards[i] = display.newRoundedRect(display.contentCenterX, offset, display.actualContentWidth - 50, 150, 16)
+        cards[i]:setFillColor(color.hex("FDF4FE"));
+        -- This is the incoming task title
+        tasks[i] = display.newText(
+            {
+                parent = cards[i],
+                x = cards[i].x - 90,
+                y = cards[i].y - 50,
+                text = tasks["title"],
+                font = native.systemFont,
+                fontSize = 18
+            }
+        )
+        tasks[i]:setFillColor(color.hex("000000"))
         scroll:insert(cards[i])
+        scroll:insert(tasks[i])
         offset = offset + 170
     end
 

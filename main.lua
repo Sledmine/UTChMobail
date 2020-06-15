@@ -28,4 +28,4 @@ end
 Runtime:addEventListener('key', onKeyEvent)
 
 -- Load first application scene
-sceneController.setScene('scenes.login')
+sceneController.setScene('scenes.tasksView')
