@@ -6,7 +6,7 @@
 local composer = require("composer")
 local widget = require("widget")
 
-local utchVirtual = require("utils.utchVirtual")
+local utchVirtual = require("lib.utchVirtual")
 
 local scene = composer.newScene()
 
