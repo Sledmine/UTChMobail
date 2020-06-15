@@ -51,7 +51,6 @@ function scene:create(event)
         strokeColor = { default={0,0,0,1}, over={1,1,1,1} },
         strokeWidth = 2
     })
-
     sceneGroup:insert(backgroundImage)
     sceneGroup:insert(userInput)
     sceneGroup:insert(passwordInput)

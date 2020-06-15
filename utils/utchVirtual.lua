@@ -2,12 +2,17 @@ local inspect = require('inspect')
 local glue = require('glue')
 local htmlParser = require('htmlparser')
 
+-- Entities
+local Task = require("entities.task")
+
 -- Module
 local utchVirtual = {}
 
 local lastCookie = ''
 local returnCallback = nil
 local process = nil
+
+local debugFolder = 'D:\\VirtualMobailDump'
 
 ----------------- Parse functions ----------------------
 
@@ -21,15 +26,19 @@ local function parseToken(event)
         end
 
         local htmlText = event.response
-        glue.writefile('D:\\get.html', htmlText, 't')
+        --glue.writefile(debugFolder .. '\\get.html', htmlText, 't')
 
         local htmlObject = htmlParser.parse(htmlText)
 
         local elements = htmlObject("input[name='logintoken']")
-        glue.writefile('D:\\get.json', inspect(elements), 't')
+        --glue.writefile(debugFolder .. '\\get.json', inspect(elements), 't')
 
-        local token = elements[1].attributes.value
-        return token
+        if (elements and #elements > 0) then
+            local token = elements[1].attributes.value
+            if (token) then
+                return token
+            end
+        end
     end
     return nil
 end
@@ -44,12 +53,12 @@ local function parseCookie(event)
             print('New Cookie: ' .. lastCookie)
         end
         local htmlText = event.response
-        glue.writefile('D:\\post.html', htmlText, 't')
+        --glue.writefile(debugFolder .. '\\post.html', htmlText, 't')
 
         local htmlObject = htmlParser.parse(htmlText)
 
         local elements = htmlObject("input[name='logintoken']")
-        glue.writefile('D:\\post.json', inspect(elements), 't')
+        --glue.writefile(debugFolder .. '\\post.json', inspect(elements), 't')
 
         return lastCookie
     end
@@ -58,13 +67,67 @@ end
 
 local function parseTasks(event)
     if (not event.isError) then
-        
+        local htmlText = event.response
+        --glue.writefile(debugFolder .. '\\tasks.html', htmlText, 't')
+
+        local htmlSelector = htmlParser.parse(htmlText)
+
+        local tasks = htmlSelector("div[data-type='event']")
+        print('Found ' .. #tasks .. ' pending tasks!')
+
+        ---@type Task[]
+        local studentTasks = {}
+
+        for taskIndex, taskElement in pairs (tasks) do
+            -- Get task name
+            local taskName = taskElement.attributes['data-event-title']
+            local taskDate = ''
+            local taskUrl = ''
+            
+            -- Get isolated task 
+            local taskElementText = taskElement:gettext()
+            local taskElementSelector = htmlParser.parse(taskElementText)
+
+
+            -- Get hyperlinks to retrieve date, attachments and task url
+            local taskElementHyperlinks = taskElementSelector('a')
+            for hyperlinkIndex, hyperlinkElement in pairs(taskElementHyperlinks) do
+                local href = hyperlinkElement.attributes.href
+                
+                -- Processing epoch date
+                if (hyperlinkIndex == 1) then
+                    local splitValues = glue.string.split('=', href)
+                    taskDate = splitValues[#splitValues]
+                else
+                    local attachment = hyperlinkElement.attributes.title
+                    if (attachment) then
+                        --print(attachment .. ' HAS A PDFFF!!!')
+                    else
+                        taskUrl = href
+                    end
+                end
+
+                local hyperlinkElementText = hyperlinkElement:gettext()
+                --glue.writefile(debugFolder .. '\\hyperlink_' .. taskIndex .. '_' .. hyperlinkIndex ..'.html', hyperlinkElementText, 't')
+            end
+
+            -- Create Task object instance
+            local singleTask = Task:new(taskName, taskDate, taskUrl)
+
+            -- Append to the list the new task
+            glue.append(studentTasks, singleTask)
+            
+             --glue.writefile(debugFolder .. '\\tasks' .. taskIndex ..'.json', taskElementText, 't')
+        end
+        --glue.writefile(debugFolder .. '\\tasks.json', inspect(tasks), 't')
+
+        return studentTasks
     end
     return nil
 end
 
 local function dumpRequest(event)
-    glue.writefile('D:\\dump.html', event.response, 't')
+    glue.writefile(debugFolder .. '\\dump.html', event.response, 't')
 end
 
 ---------------------------------------------------------
@@ -103,7 +166,6 @@ function utchVirtual.login(userName, password, token, methodCallback)
 
         local body = 'username=' .. userName .. '&password=' .. password .. '&logintoken=' .. token
 
-        
         local headers = {
             ['Cookie'] = lastCookie,
             ['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -122,9 +184,10 @@ function utchVirtual.login(userName, password, token, methodCallback)
     end
 end
 
+---@return Task[]
 function utchVirtual.getTasks(methodCallback)
     if (methodCallback) then
-        process = dumpRequest
+        process = parseTasks
         returnCallback = methodCallback
         local headers = {
             ['Cookie'] = lastCookie
@@ -132,7 +195,7 @@ function utchVirtual.getTasks(methodCallback)
         local params = {
             headers = headers
         }
-        network.request('http://virtual.utch.edu.mx/my/', 'GET', networkListener, params)
+        network.request('http://virtual.utch.edu.mx/calendar/view.php?view=upcoming', 'GET', networkListener, params)
     end
 end
 

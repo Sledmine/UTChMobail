@@ -22,11 +22,15 @@ local glue = require("glue")
 
 local background
 local myToken
-local button1
+
+---@param studentTasks Task[]
+local function tasksCallback(studentTasks)
+    print(inspect(studentTasks))
+end
 
 local function loginCallback(cookie)
     
-    utchVirtual.getTasks(glue.noop)
+    utchVirtual.getTasks(tasksCallback)
 end
 
 local function tokenCallback(token)

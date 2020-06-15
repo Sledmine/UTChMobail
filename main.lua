@@ -25,7 +25,7 @@ local function onKeyEvent(event)
 end
 
 -- Add the key event listener
-Runtime:addEventListener('key', onKeyEvent)
+--Runtime:addEventListener('key', onKeyEvent)
 
 -- Load first application scene
-sceneController.setScene('scenes.tasksView')
+sceneController.setScene('scenes.home')
