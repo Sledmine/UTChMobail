@@ -1,44 +1,47 @@
+------------------------------------------------------------------------------
+-- Login
+-- Author: Gelatinoso
+-- Login scene for UTCh Virtual data
+------------------------------------------------------------------------------
 local composer = require("composer")
 local widget = require("widget")
 
 local scene = composer.newScene()
 
+local backgroundImage
+local userInput
+local passwordInput
+local buttonLogin
+
 function scene:create(event)
     local sceneGroup = self.view
 
-    local background = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
+    backgroundImage = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
+    backgroundImage.x = display.contentCenterX
+    backgroundImage.y = display.contentCenterY
 
-    local user = native.newTextBox(display.contentCenterX, display.contentCenterY - 60, display.actualContentWidth - 90, 40)
-    user.isEditable = true
-    user.size = 20
-    user.placeholder = "Usuario"
+    userInput = native.newTextBox(display.contentCenterX, display.contentCenterY - 60, display.actualContentWidth - 90, 40)
+    userInput.isEditable = true
+    userInput.size = 20
+    userInput.placeholder = "Usuario"
 
-    local pass = native.newTextBox(display.contentCenterX, user.y + 70, display.actualContentWidth - 90, 40) 
-    pass.isEditable = true
-    pass.size = 20
-    pass.placeholder = "Contraseña"
+    passwordInput = native.newTextBox(display.contentCenterX, userInput.y + 70, display.actualContentWidth - 90, 40) 
+    passwordInput.isEditable = true
+    passwordInput.size = 20
+    passwordInput.placeholder = "Contraseña"
 
-    
-    local function handleButtonEvent( event )
+    local function loginButtonHandle( event )
         if ( "ended" == event.phase ) then
-            print(user.test)
-            -- reemplazar por usuario de virtual
-                local options = {
-                    effect = "slideDown",
-                    time = 400
-                }
-                composer.gotoScene("scenes.mainMenu", options)
+            sceneController.setScene("scenes.tasksView")
         end
     end
 
-    local button = widget.newButton({
-        x = pass.x, 
-        y = pass.y + 80, 
-        label = "Login",
+    buttonLogin = widget.newButton({
+        x = passwordInput.x, 
+        y = passwordInput.y + 80, 
+        label = "Iniciar sesión",
         labelColor ={default={0,0,0}, over={0,0,0,0.5}},
-        onEvent = handleButtonEvent,
+        onEvent = loginButtonHandle,
         id = "login",
         shape = "roundedRect",
         width = display.contentWidth - 100,
@@ -49,11 +52,10 @@ function scene:create(event)
         strokeWidth = 2
     })
 
-
-    sceneGroup:insert(pass)
-    sceneGroup:insert(user)
-    sceneGroup:insert(background)
-    sceneGroup:insert(button)
+    sceneGroup:insert(backgroundImage)
+    sceneGroup:insert(userInput)
+    sceneGroup:insert(passwordInput)
+    sceneGroup:insert(buttonLogin)
 end
 
 -- show()
@@ -88,6 +90,8 @@ end
 -- destroy()
 function scene:destroy(event)
     local sceneGroup = self.view
+    userInput:removeSelf()
+    passwordInput:removeSelf()
 end
 
 -- -----------------------------------------------------------------------------------
