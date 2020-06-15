@@ -9,7 +9,7 @@ local button
 function scene:create(event)
     local sceneGroup = self.view
 
-    background = display.newImageRect("res\\loginBackground.png", display.actualContentWidth, display.actualContentHeight)
+    background = display.newImageRect("img/loginBackground.png", display.actualContentWidth, display.actualContentHeight)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
