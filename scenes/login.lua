@@ -28,16 +28,12 @@ function scene:create(event)
         if ( "ended" == event.phase ) then
             print(user.test)
             -- reemplazar por usuario de virtual
-            if(user.text == "1117150020" and pass.text == "test") then
-                options = {
-                    efect = "slideRight",
-                    time = 400
+                local options = {
+                    effect = "slideRight",
+                    time = 400,
+                    params = {}
                 }
-                composer.removeScene("scenes.login");
                 composer.gotoScene("scenes.mainMenu", options)
-            else
-                print("No jala tu marranada")
-            end
         end
     end
 
