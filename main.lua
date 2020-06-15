@@ -6,4 +6,4 @@
 local composer = require("composer")
 
 -- Load first application scene
-composer.gotoScene("scenes.home")
+composer.gotoScene("scenes.login")
