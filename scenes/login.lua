@@ -6,12 +6,38 @@
 local composer = require("composer")
 local widget = require("widget")
 
+local utchVirtual = require("utils.utchVirtual")
+
 local scene = composer.newScene()
 
 local backgroundImage
 local userInput
 local passwordInput
 local buttonLogin
+
+---@param studentsTasks Task[]
+local function tasksCallback(studentsTasks)
+    local options = {
+        params = {
+            studentsTasks = studentsTasks
+        }
+    }
+    print(inspect(studentsTasks))
+    sceneController.setScene("scenes.tasksView", options)
+end
+
+local function loginCallback()
+    utchVirtual.getTasks(tasksCallback)
+end
+
+---@param token string
+local function tokenCallback(token)
+    if (token) then
+        if (userInput.text ~= "" and passwordInput.text ~= "") then
+            utchVirtual.login(userInput.text, passwordInput.text, token, loginCallback)
+        end
+    end
+end
 
 function scene:create(event)
     local sceneGroup = self.view
@@ -32,13 +58,14 @@ function scene:create(event)
 
     local function loginButtonHandle( event )
         if ( "ended" == event.phase ) then
-            sceneController.setScene("scenes.tasksView")
+            -- sceneController.setScene("scenes.tasksView")
+            utchVirtual.getToken(tokenCallback)
         end
     end
 
     buttonLogin = widget.newButton({
-        x = passwordInput.x, 
-        y = passwordInput.y + 80, 
+        x = passwordInput.x,
+        y = passwordInput.y + 80,
         label = "Iniciar sesión",
         labelColor ={default={0,0,0}, over={0,0,0,0.5}},
         onEvent = loginButtonHandle,

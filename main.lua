@@ -5,6 +5,8 @@
 ------------------------------------------------------------------------------
 sceneController = require('utils.sceneController')
 
+inspect = require("inspect")
+
 -- Called when a key event has been received
 local function onKeyEvent(event)
     -- Print which key was pressed down/up
@@ -28,4 +30,4 @@ end
 --Runtime:addEventListener('key', onKeyEvent)
 
 -- Load first application scene
-sceneController.setScene('scenes.home')
+sceneController.setScene('scenes.login')

@@ -12,7 +12,7 @@ function scene:create( event )
     background.y = display.contentCenterY
 
     -- Preparing the number of pixels for the max scrollableHeight
-    local cards = {1,2,3,4}
+    local cards = {1,2,3,4]
     local tasks = {title="Tarea x", status="entrega mañana", deadline="12:00"}
     local scrollableHeight = (150 * #cards) + (20 * #cards)
 
