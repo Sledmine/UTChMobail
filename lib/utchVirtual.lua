@@ -1,9 +1,9 @@
+local htmlParser = require('htmlparser')
 local inspect = require('inspect')
 local glue = require('glue')
-local htmlParser = require('htmlparser')
 
 -- Entities
-local Task = require("entities.task")
+local Task = require('entities.task')
 
 -- Module
 local utchVirtual = {}
@@ -26,12 +26,10 @@ local function parseToken(event)
         end
 
         local htmlText = event.response
-        --glue.writefile(debugFolder .. '\\get.html', htmlText, 't')
 
-        local htmlObject = htmlParser.parse(htmlText)
+        local htmlSelector = htmlParser.parse(htmlText)
 
-        local elements = htmlObject("input[name='logintoken']")
-        --glue.writefile(debugFolder .. '\\get.json', inspect(elements), 't')
+        local elements = htmlSelector("input[name='logintoken']")
 
         if (elements and #elements > 0) then
             local token = elements[1].attributes.value
@@ -53,12 +51,10 @@ local function parseCookie(event)
             print('New Cookie: ' .. lastCookie)
         end
         local htmlText = event.response
-        --glue.writefile(debugFolder .. '\\post.html', htmlText, 't')
 
-        local htmlObject = htmlParser.parse(htmlText)
+        local htmlSelector = htmlSelector.parse(htmlText)
 
         local elements = htmlObject("input[name='logintoken']")
-        --glue.writefile(debugFolder .. '\\post.json', inspect(elements), 't')
 
         return lastCookie
     end
@@ -78,37 +74,37 @@ local function parseTasks(event)
         ---@type Task[]
         local studentTasks = {}
 
-        for taskIndex, taskElement in pairs (tasks) do
+        for taskIndex, taskElement in pairs(tasks) do
             -- Get task name
             local taskName = taskElement.attributes['data-event-title']
             local taskDate = ''
             local taskUrl = ''
-            
-            -- Get isolated task 
+
+            -- Get isolated task
             local taskElementText = taskElement:gettext()
             local taskElementSelector = htmlParser.parse(taskElementText)
-
 
             -- Get hyperlinks to retrieve date, attachments and task url
             local taskElementHyperlinks = taskElementSelector('a')
             for hyperlinkIndex, hyperlinkElement in pairs(taskElementHyperlinks) do
+                -- Get href url
                 local href = hyperlinkElement.attributes.href
-                
+
                 -- Processing epoch date
                 if (hyperlinkIndex == 1) then
                     local splitValues = glue.string.split('=', href)
                     taskDate = splitValues[#splitValues]
                 else
                     local attachment = hyperlinkElement.attributes.title
+                    -- Processing task attachment
                     if (attachment) then
-                        --print(attachment .. ' HAS A PDFFF!!!')
+                        -- TO DO: Add attachments list to Task class
                     else
                         taskUrl = href
                     end
                 end
 
                 local hyperlinkElementText = hyperlinkElement:gettext()
-                --glue.writefile(debugFolder .. '\\hyperlink_' .. taskIndex .. '_' .. hyperlinkIndex ..'.html', hyperlinkElementText, 't')
             end
 
             -- Create Task object instance
@@ -116,10 +112,7 @@ local function parseTasks(event)
 
             -- Append to the list the new task
             glue.append(studentTasks, singleTask)
-            
-             --glue.writefile(debugFolder .. '\\tasks' .. taskIndex ..'.json', taskElementText, 't')
         end
-        --glue.writefile(debugFolder .. '\\tasks.json', inspect(tasks), 't')
 
         return studentTasks
     end

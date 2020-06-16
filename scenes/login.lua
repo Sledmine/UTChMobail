@@ -26,6 +26,8 @@ local function tasksCallback(studentsTasks)
     --sceneController.setScene("scenes.tasksView", options)
 end
 
+tasksCallback()
+
 local function loginCallback()
     utchVirtual.getTasks(tasksCallback)
 end

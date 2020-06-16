@@ -9,6 +9,7 @@ local class = require("middleclass")
 ---@class Task
 local Task = class('Task')
 
+--- Table dayweeks translation
 local dayweeks = {
     Monday = "Lunes",
     Tuesday = "Martes",
