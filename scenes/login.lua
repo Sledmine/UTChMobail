@@ -15,18 +15,16 @@ local userInput
 local passwordInput
 local buttonLogin
 
----@param studentsTasks Task[]
-local function tasksCallback(studentsTasks)
+---@param studentTasks Task[]
+local function tasksCallback(studentTasks)
     local options = {
         params = {
-            studentsTasks = studentsTasks
+            studentTasks = studentTasks
         }
     }
-    print(inspect(studentsTasks))
-    --sceneController.setScene("scenes.tasksView", options)
+      sceneController.setScene("scenes.tasksView", options)
 end
 
-tasksCallback()
 
 local function loginCallback()
     utchVirtual.getTasks(tasksCallback)

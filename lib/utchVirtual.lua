@@ -52,9 +52,9 @@ local function parseCookie(event)
         end
         local htmlText = event.response
 
-        local htmlSelector = htmlSelector.parse(htmlText)
+        local htmlSelector = htmlParser.parse(htmlText)
 
-        local elements = htmlObject("input[name='logintoken']")
+        local elements = htmlSelector("input[name='logintoken']")
 
         return lastCookie
     end

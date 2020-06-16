@@ -6,26 +6,35 @@ local scene = composer.newScene()
 
 function scene:create( event )
     local sceneGroup = self.view
+    local sceneParams = event.params
 
     background = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
-    local cards = {1,2,3,4,5,6}
 
     -- Creation of the tableView containing the student tasks
     local function onRowRender(event)
         local row = event.row
+        local rowParams = event.row.params
+        
+        ---@type Task
+        local studentTask = rowParams.studentTask
+
         local rowHeight = row.actualContentHeight
         local rowWidth = row.actualContentWidth
 
-        local rowInfo = display.newText( row, "Tarea " .. row.index, 0, 0, nil, 16 )
+        local taskTitle = studentTask:getTitle()
+        -- after the x and y params, we can define the limits of the text
+        local rowInfo = display.newText( row, taskTitle, display.contentCenterX, 20, display.actualContentWidth - 30, 60, nil, 16 )
         rowInfo:setFillColor( 0 )
         rowInfo.anchorX = 0
+        rowInfo.anchorY = 0
         rowInfo.x = 20
         rowInfo.y = 20
     end
 
+    -- table view options
     local tableView = widget.newTableView({
         x = display.contentCenterX,
         y = display.contentCenterY,
@@ -35,13 +44,19 @@ function scene:create( event )
         hideBackground = true
     })
 
-    for i = 1, #cards do
-        tableView:insertRow{
-            rowColor = { default={color.hex("FDF4FE")}},
-            rowHeight = 150
-        }
+    -- in this section we can change the individual row options}
+    local studentTasks = sceneParams.studentTasks
+    print(inspect(studentTasks))
+    if (studentTasks) then
+        for studentTaskIndex,studentTask in pairs(studentTasks) do
+            tableView:insertRow{
+                rowColor = { default={color.hex("FDF4FE")}},
+                rowHeight = 150,
+                params = {studentTask = studentTask}
+            }
+        end
     end
-
+    
 end
  
  
