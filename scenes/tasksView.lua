@@ -26,12 +26,12 @@ function scene:create( event )
 
         local taskTitle = studentTask:getTitle()
         -- after the x and y params, we can define the limits of the text
-        local rowInfo = display.newText( row, taskTitle, display.contentCenterX, 20, display.actualContentWidth - 30, 60, nil, 16 )
-        rowInfo:setFillColor( 0 )
-        rowInfo.anchorX = 0
-        rowInfo.anchorY = 0
-        rowInfo.x = 20
-        rowInfo.y = 20
+        local rowTaskTitle = display.newText( row, taskTitle, display.contentCenterX, 20, display.actualContentWidth - 30, 60, nil, 16 )
+        rowTaskTitle:setFillColor( 0 )
+        rowTaskTitle.anchorX = 0
+        rowTaskTitle.anchorY = 0
+        rowTaskTitle.x = 20
+        rowTaskTitle.y = 20
     end
 
     -- table view options

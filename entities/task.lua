@@ -7,7 +7,7 @@ local class = require("middleclass")
 
 --- Task class
 ---@class Task
-local Task = class('Task')
+local Task = class("Task")
 
 --- Table dayweeks translation
 local dayweeks = {
@@ -21,7 +21,7 @@ local dayweeks = {
 }
 
 local function epochToDateString(epochDate)
-    local formattedDate = os.date('%A %e/%m/%Y a las %H:%M UTC', tonumber(epochDate))
+    local formattedDate = os.date("%A %e/%m/%Y a las %H:%M UTC", tonumber(epochDate))
     for dayname, translation in pairs(dayweeks) do
         if (formattedDate:find(dayname)) then
             formattedDate = string.gsub(formattedDate, dayname, translation)
@@ -30,14 +30,22 @@ local function epochToDateString(epochDate)
     return formattedDate
 end
 
+local function cleanTaskTitle(title)
+    local cleanedTitle = title
+    cleanedTitle = string.gsub(title, "está en fecha de entrega", "")
+    return cleanedTitle
+end
+
 --[[
     public class Task {
     String title;
     Date date;
     String link;
 
-    public Task(title) {
-
+    public Task(String title, Date date, String link) {
+        this.title = title;
+        this.date = date;
+        this.link = link;
     }
 }
 ]]
@@ -46,14 +54,14 @@ end
 ---@param date string
 ---@param link string
 function Task:initialize(title, date, link)
-    self.title = title
+    self.title = cleanTaskTitle(title)
     self.date = epochToDateString(date)
     self.link = link
 end
 
 --[[
     public String getTitle() {
-       return this.title; 
+       return this.title;
     }
 ]]
 ---@return string
@@ -63,13 +71,12 @@ end
 
 ---@param title string
 function Task:setTitle(title)
-
-    self.title = title
+    self.title = cleanTaskTitle(title)
 end
 
 ---@return string
 function Task:getDate()
-    return self.title
+    return self.date
 end
 
 ---@param date string
@@ -79,7 +86,7 @@ end
 
 ---@return string
 function Task:getLink()
-    return self.title
+    return self.link
 end
 
 ---@param link string

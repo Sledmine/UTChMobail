@@ -1,18 +1,24 @@
-local htmlParser = require('htmlparser')
-local inspect = require('inspect')
-local glue = require('glue')
+------------------------------------------------------------------------------
+-- UTCh Virtual Module
+-- Author: Sledmine
+-- Module to gather data from UTCh Virtual
+------------------------------------------------------------------------------
+local htmlParser = require("htmlparser")
+local inspect = require("inspect")
+local glue = require("glue")
+
+-- Debug write path
+debug.filesPath = "D:\\VirtualMobailDump"
 
 -- Entities
-local Task = require('entities.task')
+local Task = require("entities.task")
 
 -- Module
 local utchVirtual = {}
 
-local lastCookie = ''
+local lastCookie = ""
 local returnCallback = nil
 local process = nil
-
-local debugFolder = 'D:\\VirtualMobailDump'
 
 ----------------- Parse functions ----------------------
 
@@ -27,15 +33,19 @@ local function parseToken(event)
 
         local htmlText = event.response
 
+        -- Debug write for entire html file
+        debug.writefile("token.html", htmlText)
+
+        -- Create selector from html parser
         local htmlSelector = htmlParser.parse(htmlText)
 
         local elements = htmlSelector("input[name='logintoken']")
+        -- Debug write for entire json like file
+        debug.writefile("token.json", inspect(elements))
 
         if (elements and #elements > 0) then
             local token = elements[1].attributes.value
-            if (token) then
-                return token
-            end
+            if (token) then return token end
         end
     end
     return nil
@@ -64,7 +74,6 @@ end
 local function parseTasks(event)
     if (not event.isError) then
         local htmlText = event.response
-        --glue.writefile(debugFolder .. '\\tasks.html', htmlText, 't')
 
         local htmlSelector = htmlParser.parse(htmlText)
 
@@ -131,8 +140,8 @@ local function networkListener(event)
         print(inspect(event))
         print('Network error: ', event.response)
     else
-        --print(inspect(event))
-        --print('RESPONSE: ' .. event.response)
+        -- print(inspect(event))
+        -- print('RESPONSE: ' .. event.response)
     end
     returnCallback(process(event))
 end
@@ -141,14 +150,11 @@ function utchVirtual.getToken(methodCallback)
     if (methodCallback) then
         process = parseToken
         returnCallback = methodCallback
-        local headers = {
-            ['Cookie'] = lastCookie
-        }
-        local params = {
-            headers = headers
-        }
+        local headers = {['Cookie'] = lastCookie}
+        local params = {headers = headers}
         print('Get Cookie: ' .. lastCookie)
-        network.request('http://virtual.utch.edu.mx/login/index.php', 'GET', networkListener, params)
+        network.request('http://virtual.utch.edu.mx/login/index.php', 'GET',
+                        networkListener, params)
     end
 end
 
@@ -157,7 +163,8 @@ function utchVirtual.login(userName, password, token, methodCallback)
         process = parseCookie
         returnCallback = methodCallback
 
-        local body = 'username=' .. userName .. '&password=' .. password .. '&logintoken=' .. token
+        local body = 'username=' .. userName .. '&password=' .. password ..
+                         '&logintoken=' .. token
 
         local headers = {
             ['Cookie'] = lastCookie,
@@ -165,15 +172,12 @@ function utchVirtual.login(userName, password, token, methodCallback)
         }
         print('Post Cookie: ' .. lastCookie)
 
-        local params = {
-            headers = headers,
-            body = body,
-            handleRedirects = false
-        }
+        local params = {headers = headers, body = body, handleRedirects = false}
 
         print('Body: ' .. body)
 
-        network.request('http://virtual.utch.edu.mx/login/index.php', 'POST', networkListener, params)
+        network.request('http://virtual.utch.edu.mx/login/index.php', 'POST',
+                        networkListener, params)
     end
 end
 
@@ -182,13 +186,11 @@ function utchVirtual.getTasks(methodCallback)
     if (methodCallback) then
         process = parseTasks
         returnCallback = methodCallback
-        local headers = {
-            ['Cookie'] = lastCookie
-        }
-        local params = {
-            headers = headers
-        }
-        network.request('http://virtual.utch.edu.mx/calendar/view.php?view=upcoming', 'GET', networkListener, params)
+        local headers = {['Cookie'] = lastCookie}
+        local params = {headers = headers}
+        network.request(
+            'http://virtual.utch.edu.mx/calendar/view.php?view=upcoming', 'GET',
+            networkListener, params)
     end
 end
 

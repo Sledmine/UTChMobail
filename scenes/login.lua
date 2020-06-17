@@ -17,24 +17,18 @@ local buttonLogin
 
 ---@param studentTasks Task[]
 local function tasksCallback(studentTasks)
-    local options = {
-        params = {
-            studentTasks = studentTasks
-        }
-    }
-      sceneController.setScene("scenes.tasksView", options)
+    local options = {params = {studentTasks = studentTasks}}
+    sceneController.setScene("scenes.tasksView", options)
 end
 
-
-local function loginCallback()
-    utchVirtual.getTasks(tasksCallback)
-end
+local function loginCallback() utchVirtual.getTasks(tasksCallback) end
 
 ---@param token string
 local function tokenCallback(token)
     if (token) then
         if (userInput.text ~= "" and passwordInput.text ~= "") then
-            utchVirtual.login(userInput.text, passwordInput.text, token, loginCallback)
+            utchVirtual.login(userInput.text, passwordInput.text, token,
+                              loginCallback)
         end
     end
 end
@@ -42,22 +36,31 @@ end
 function scene:create(event)
     local sceneGroup = self.view
 
-    backgroundImage = display.newImageRect("img/background.png", display.actualContentWidth, display.actualContentHeight)
+    backgroundImage = display.newImageRect("img/background.png",
+                                           display.actualContentWidth,
+                                           display.actualContentHeight)
     backgroundImage.x = display.contentCenterX
     backgroundImage.y = display.contentCenterY
 
-    userInput = native.newTextBox(display.contentCenterX, display.contentCenterY - 60, display.actualContentWidth - 90, 40)
-    userInput.isEditable = true
-    userInput.size = 20
+    userInput = native.newTextField(display.contentCenterX,
+                                    display.contentCenterY - 60,
+                                    display.actualContentWidth - 90, 40)
+    userInput.align = "center"
+    userInput.size = 16
+    userInput:resizeHeightToFitFont()
     userInput.placeholder = "Usuario"
 
-    passwordInput = native.newTextBox(display.contentCenterX, userInput.y + 70, display.actualContentWidth - 90, 40) 
-    passwordInput.isEditable = true
-    passwordInput.size = 20
+    passwordInput = native.newTextField(display.contentCenterX,
+                                        userInput.y + 40,
+                                        display.actualContentWidth - 90, 40)
+    passwordInput.align = "center"
+    passwordInput.isSecure = true
+    passwordInput.size = 16
+    passwordInput:resizeHeightToFitFont()
     passwordInput.placeholder = "Contraseña"
 
-    local function loginButtonHandle( event )
-        if ( "ended" == event.phase ) then
+    local function loginButtonHandle(event)
+        if ("ended" == event.phase) then
             -- sceneController.setScene("scenes.tasksView")
             utchVirtual.getToken(tokenCallback)
         end
@@ -67,16 +70,16 @@ function scene:create(event)
         x = passwordInput.x,
         y = passwordInput.y + 80,
         label = "Iniciar sesión",
-        labelColor ={default={0,0,0}, over={0,0,0,0.5}},
+        labelColor = {default = {0, 0, 0}, over = {0, 0, 0, 0.5}},
         onEvent = loginButtonHandle,
         id = "login",
         shape = "roundedRect",
         width = display.contentWidth - 100,
         height = 40,
-        cornerRadius= 3,
-        fillColor = { default={255,255,255,1}, over={1,0.4,0.7,0.4} },
-        strokeColor = { default={0,0,0,1}, over={1,1,1,1} },
-        strokeWidth = 2
+        cornerRadius = 3,
+        fillColor = {default = {255, 255, 255, 1}, over = {255, 255, 255, 0.5}},
+        --strokeColor = {default = {0, 0, 0, 1}, over = {1, 1, 1, 1}},
+        --strokeWidth = 2
     })
     sceneGroup:insert(backgroundImage)
     sceneGroup:insert(userInput)
