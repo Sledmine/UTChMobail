@@ -74,6 +74,7 @@ end
 local function parseTasks(event)
     if (not event.isError) then
         local htmlText = event.response
+        debug.writefile("tasks.html", htmlText)
 
         local htmlSelector = htmlParser.parse(htmlText)
 
@@ -128,6 +129,16 @@ local function parseTasks(event)
     return nil
 end
 
+local function parseSubjects(event)
+    if (not event.isError) then
+        local htmlText = event.response
+        debug.writefile("subject.html", htmlText)
+
+        local htmlSelector = htmlParser.parse(htmlText)
+
+    end
+end
+
 local function dumpRequest(event)
     glue.writefile(debugFolder .. '\\dump.html', event.response, 't')
 end
@@ -137,11 +148,11 @@ end
 -- Listener to recieve async HTTP response
 local function networkListener(event)
     if (event.isError) then
-        print(inspect(event))
-        print('Network error: ', event.response)
+        debug.print(inspect(event))
+        debug.print('Network error: ', event.response)
     else
-        -- print(inspect(event))
-        -- print('RESPONSE: ' .. event.response)
+        -- debug.print(inspect(event))
+        -- debug.print('RESPONSE: ' .. event.response)
     end
     returnCallback(process(event))
 end
@@ -155,6 +166,8 @@ function utchVirtual.getToken(methodCallback)
         print('Get Cookie: ' .. lastCookie)
         network.request('http://virtual.utch.edu.mx/login/index.php', 'GET',
                         networkListener, params)
+    else
+        debug.print("Warning, no callback method on getToken")
     end
 end
 
@@ -178,6 +191,8 @@ function utchVirtual.login(userName, password, token, methodCallback)
 
         network.request('http://virtual.utch.edu.mx/login/index.php', 'POST',
                         networkListener, params)
+    else
+            debug.print("Warning, no callback method on login")
     end
 end
 
@@ -191,6 +206,20 @@ function utchVirtual.getTasks(methodCallback)
         network.request(
             'http://virtual.utch.edu.mx/calendar/view.php?view=upcoming', 'GET',
             networkListener, params)
+    end
+end
+
+function utchVirtual.getSubject(methodCallback)
+    if (methodCallback) then
+        process = parseSubjects
+        returnCallback = methodCallback
+        local headers = {['Cookie'] = lastCookie}
+        local params = {headers = headers}
+        network.request(
+            'http://virtual.utch.edu.mx/mod/assign/view.php?id=66336', "GET",
+            networkListener, params)
+    else 
+        debug.print("Warning, getSubject called with no callback")
     end
 end
 

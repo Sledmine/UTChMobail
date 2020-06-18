@@ -13,7 +13,7 @@ debug = require("lib.debug")
 debug.mode = true
 
 -- Import unit tests
-local taskViewTest = require("test.taskViewTest")
+local utchVirtualTest = require("test.utchVirtualTest")
 
 -- Called when a key event has been received
 local function onKeyEvent(event)
@@ -22,8 +22,8 @@ local function onKeyEvent(event)
     print(message)
 
     -- If pressed "f12" key then run unit tests
-    if (event.keyName == "f12") then
-        taskViewTest()
+    if (event.keyName == "f12" and event.phase == "down") then
+        utchVirtualTest()
     end
 
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
