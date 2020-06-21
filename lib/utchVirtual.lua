@@ -7,11 +7,9 @@ local htmlParser = require("htmlparser")
 local inspect = require("inspect")
 local glue = require("glue")
 
--- Debug write path
-debug.filesPath = "D:\\VirtualMobailDump"
-
 -- Entities
 local Task = require("entities.task")
+local httpEvent = require("entities.httpEvent")
 
 -- Module
 local utchVirtual = {}
@@ -20,28 +18,28 @@ local lastCookie = ""
 local returnCallback = nil
 local process = nil
 
------------------ Parse functions ----------------------
+local function substractCookie(cookie)
+    return glue.string.split(';', cookie)[1]
+end
 
+--- Parse token from an http response
 local function parseToken(event)
     if (not event.isError) then
-        local SetCookie = event.responseHeaders['Set-Cookie']
-        if (SetCookie) then
-            print('Set-Cookie: ' .. SetCookie)
-            lastCookie = glue.string.split(';', SetCookie)[1]
-            print('New Cookie: ' .. lastCookie)
+        local SetCookie
+        if (event.responseHeaders) then
+            SetCookie = event.responseHeaders['Set-Cookie']
+            if (SetCookie) then
+                print('Set-Cookie: ' .. SetCookie)
+                lastCookie = substractCookie
+            end
         end
 
         local htmlText = event.response
-
-        -- Debug write for entire html file
-        debug.writefile("token.html", htmlText)
 
         -- Create selector from html parser
         local htmlSelector = htmlParser.parse(htmlText)
 
         local elements = htmlSelector("input[name='logintoken']")
-        -- Debug write for entire json like file
-        debug.writefile("token.json", inspect(elements))
 
         if (elements and #elements > 0) then
             local token = elements[1].attributes.value
@@ -51,30 +49,33 @@ local function parseToken(event)
     return nil
 end
 
+--- Parse cookie from an http response
 local function parseCookie(event)
     if (not event.isError) then
-        local SetCookie = event.responseHeaders['Set-Cookie']
-        if (SetCookie) then
-            print('You recieved a NEW cookie!!!!!!!!!!')
-            print('Set-Cookie: ' .. SetCookie)
-            lastCookie = glue.string.split(';', SetCookie)[1]
-            print('New Cookie: ' .. lastCookie)
+        local SetCookie
+        if (event.responseHeaders) then
+            SetCookie = event.responseHeaders['Set-Cookie']
+            if (SetCookie) then
+                print('Set-Cookie: ' .. SetCookie)
+                lastCookie = substractCookie
+            end
         end
+
         local htmlText = event.response
 
         local htmlSelector = htmlParser.parse(htmlText)
 
         local elements = htmlSelector("input[name='logintoken']")
 
-        return lastCookie
+        return SetCookie
     end
     return nil
 end
 
+--- Parse tasks from an http response
 local function parseTasks(event)
     if (not event.isError) then
         local htmlText = event.response
-        debug.writefile("tasks.html", htmlText)
 
         local htmlSelector = htmlParser.parse(htmlText)
 
@@ -132,31 +133,31 @@ end
 local function parseSubjects(event)
     if (not event.isError) then
         local htmlText = event.response
-        debug.writefile("subject.html", htmlText)
 
         local htmlSelector = htmlParser.parse(htmlText)
 
     end
 end
 
-local function dumpRequest(event)
-    glue.writefile(debugFolder .. '\\dump.html', event.response, 't')
-end
-
 ---------------------------------------------------------
 
 -- Listener to recieve async HTTP response
-local function networkListener(event)
+---@param eventObject table
+local function networkListener(eventObject)
+    local event = httpEvent:new(eventObject)
     if (event.isError) then
-        debug.print(inspect(event))
-        debug.print('Network error: ', event.response)
+        -- print(inspect(eventObject))
+        print('Network error: ', event.response)
     else
-        -- debug.print(inspect(event))
-        -- debug.print('RESPONSE: ' .. event.response)
+        -- print(inspect(eventObject))
+        -- print('RESPONSE: ' .. event.response)
     end
     returnCallback(process(event))
 end
 
+--- Get the login token by an async call
+---@param methodCallback function
+---@return string token
 function utchVirtual.getToken(methodCallback)
     if (methodCallback) then
         process = parseToken
@@ -167,10 +168,16 @@ function utchVirtual.getToken(methodCallback)
         network.request('http://virtual.utch.edu.mx/login/index.php', 'GET',
                         networkListener, params)
     else
-        debug.print("Warning, no callback method on getToken")
+        print("Warning, no callback method on getToken")
     end
 end
 
+--- Create a session and get the session cookie by an async call
+---@param userName string
+---@param password string
+---@param token string
+---@param methodCallback function
+---@return string cookie
 function utchVirtual.login(userName, password, token, methodCallback)
     if (methodCallback) then
         process = parseCookie
@@ -192,10 +199,12 @@ function utchVirtual.login(userName, password, token, methodCallback)
         network.request('http://virtual.utch.edu.mx/login/index.php', 'POST',
                         networkListener, params)
     else
-            debug.print("Warning, no callback method on login")
+        print("Warning, no callback method on login")
     end
 end
 
+--- Get current session tasks by an async call
+---@param methodCallback function
 ---@return Task[]
 function utchVirtual.getTasks(methodCallback)
     if (methodCallback) then
@@ -218,9 +227,15 @@ function utchVirtual.getSubject(methodCallback)
         network.request(
             'http://virtual.utch.edu.mx/mod/assign/view.php?id=66336', "GET",
             networkListener, params)
-    else 
-        debug.print("Warning, getSubject called with no callback")
+    else
+        print("Warning, getSubject called with no callback")
     end
 end
+
+utchVirtual.parsers = {
+    parseToken = parseToken,
+    parseCookie = parseCookie,
+    parseTasks = parseTasks
+}
 
 return utchVirtual

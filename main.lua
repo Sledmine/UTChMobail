@@ -7,19 +7,15 @@ inspect = require("inspect")
 
 -- Application libraries
 sceneController = require('lib.sceneController')
-debug = require("lib.debug")
-
--- By pass debug mode
-debug.mode = true
 
 -- Import unit tests
-local utchVirtualTest = require("test.utchVirtualTest")
+local utchVirtualTest = require("tests.utchVirtualTest")
 
 -- Called when a key event has been received
 local function onKeyEvent(event)
     -- Print which key was pressed down/up
     local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
-    print(message)
+    --print(message)
 
     -- If pressed "f12" key then run unit tests
     if (event.keyName == "f12" and event.phase == "down") then

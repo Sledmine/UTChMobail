@@ -21,7 +21,13 @@ local function tasksCallback(studentTasks)
     sceneController.setScene("scenes.tasksView", options)
 end
 
-local function loginCallback() utchVirtual.getTasks(tasksCallback) end
+local function loginCallback(cookie)
+    if (cookie) then
+        utchVirtual.getTasks(tasksCallback)
+    else
+        print("Error at trying to log in!")
+    end
+end
 
 ---@param token string
 local function tokenCallback(token)
@@ -77,9 +83,9 @@ function scene:create(event)
         width = display.contentWidth - 100,
         height = 40,
         cornerRadius = 3,
-        fillColor = {default = {255, 255, 255, 1}, over = {255, 255, 255, 0.5}},
-        --strokeColor = {default = {0, 0, 0, 1}, over = {1, 1, 1, 1}},
-        --strokeWidth = 2
+        fillColor = {default = {255, 255, 255, 1}, over = {255, 255, 255, 0.5}}
+        -- strokeColor = {default = {0, 0, 0, 1}, over = {1, 1, 1, 1}},
+        -- strokeWidth = 2
     })
     sceneGroup:insert(backgroundImage)
     sceneGroup:insert(userInput)
