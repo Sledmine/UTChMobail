@@ -14,6 +14,9 @@ local httpEvent = require("entities.httpEvent")
 -- Module
 local utchVirtual = {}
 
+-- Increase loop limit for large html files
+htmlparser_looplimit = 2000
+
 local lastCookie = ""
 local returnCallback = nil
 local process = nil
@@ -80,7 +83,6 @@ local function parseTasks(event)
         local htmlSelector = htmlParser.parse(htmlText)
 
         local tasks = htmlSelector("div[data-type='event']")
-        print('Found ' .. #tasks .. ' pending tasks!')
 
         ---@type Task[]
         local studentTasks = {}

@@ -16,6 +16,7 @@ test_UtchVirtual = {}
 
 function test_UtchVirtual:setUp()
     self.expectedToken = "yWcULcLYiAXMx3HknS6F1xB2xsi4yvDU"
+    self.expectedTaks = {}
 end
 
 -- Test correct token parsing
@@ -34,6 +35,44 @@ function test_UtchVirtual:test_parseToken()
 
     local token = utchVirtual.parsers.parseToken(event)
     lu.assertEquals(token, self.expectedToken)
+end
+
+-- Test correct tasks parsing
+function test_UtchVirtual:test_parseTasksEmpty()
+    -- Event mock data
+    local eventData = {
+        isError = false,
+        response = glue.readfile("tests\\resources\\html\\tasksEmpty.html") or
+            system.pathForFile("tests/resources/html/tasksEmpty.html",
+                               system.ResourceDirectory)
+    }
+
+    -- Create an http event entity
+    ---@type httpEvent
+    local event = httpEvent:new(eventData)
+
+    ---@type Task[]
+    local tasks = utchVirtual.parsers.parseTasks(event)
+    lu.assertEquals(tasks, self.expectedTaks)
+end
+
+-- Test correct tasks parsing
+function test_UtchVirtual:test_parseTasksFull()
+    -- Event mock data
+    local eventData = {
+        isError = false,
+        response = glue.readfile("tests\\resources\\html\\tasksFull.html") or
+            system.pathForFile("tests/resources/html/tasksFull.html",
+                               system.ResourceDirectory)
+    }
+
+    -- Create an http event entity
+    ---@type httpEvent
+    local event = httpEvent:new(eventData)
+
+    ---@type Task[]
+    local tasks = utchVirtual.parsers.parseTasks(event)
+    lu.assertEquals(tasks, self.expectedTaks)
 end
 
 local function runTests()
