@@ -13,7 +13,7 @@ log.filesPath = ""
 
 --- Log printing to console, only works if log mode is turned on
 ---@param message string
-function log.print(message) if (debug.mode) then print(message) end end
+function log.print(message) if (log.mode) then print(message) end end
 
 --- Debug file writing to a specific folder, text mode by default
 ---@param path string

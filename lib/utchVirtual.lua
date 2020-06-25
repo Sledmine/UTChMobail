@@ -30,7 +30,7 @@ local function parseToken(event)
             SetCookie = event.responseHeaders['Set-Cookie']
             if (SetCookie) then
                 print('Set-Cookie: ' .. SetCookie)
-                lastCookie = substractCookie
+                lastCookie = substractCookie(SetCookie)
             end
         end
 
@@ -57,7 +57,7 @@ local function parseCookie(event)
             SetCookie = event.responseHeaders['Set-Cookie']
             if (SetCookie) then
                 print('Set-Cookie: ' .. SetCookie)
-                lastCookie = substractCookie
+                lastCookie = substractCookie(SetCookie)
             end
         end
 
