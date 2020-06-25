@@ -36,42 +36,6 @@ function test_UtchVirtual:test_parseToken()
     lu.assertEquals(token, self.expectedToken)
 end
 
--- Test correct cookie parsing
-function test_UtchVirtual:test_parseCookie()
-    -- Event mock data
-    local eventData = {
-        isError = false,
-        response = glue.readfile("tests\\resources\\html\\token.html") or
-            system.pathForFile("tests/resources/html/token.html",
-                               system.ResourceDirectory)
-    }
-
-    -- Create an http event entity
-    ---@type httpEvent
-    local event = httpEvent:new(eventData)
-
-    local token = utchVirtual.parsers.parseToken(event)
-    lu.assertEquals(token, self.expectedToken)
-end
-
--- Test correct tasks parsing
-function test_UtchVirtual:test_parseTasks()
-    -- Event mock data
-    local eventData = {
-        isError = false,
-        response = glue.readfile("tests\\resources\\html\\token.html") or
-            system.pathForFile("tests/resources/html/token.html",
-                               system.ResourceDirectory)
-    }
-
-    -- Create an http event entity
-    ---@type httpEvent
-    local event = httpEvent:new(eventData)
-
-    local token = utchVirtual.parsers.parseToken(event)
-    lu.assertEquals(token, self.expectedToken)
-end
-
 local function runTests()
     local runner = lu.LuaUnit.new()
     runner:runSuite()
