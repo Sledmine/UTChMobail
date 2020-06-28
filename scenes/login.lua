@@ -6,11 +6,14 @@
 local composer = require("composer")
 local widget = require("widget")
 
+local color = require("lua-color-converter")
+
 local utchVirtual = require("lib.utchVirtual")
 
 local scene = composer.newScene()
 
-local backgroundImage
+local background
+local appIcon
 local userInput
 local passwordInput
 local buttonLogin
@@ -42,28 +45,34 @@ end
 function scene:create(event)
     local sceneGroup = self.view
 
-    backgroundImage = display.newImageRect("img/background.png",
-                                           display.actualContentWidth,
-                                           display.actualContentHeight)
-    backgroundImage.x = display.contentCenterX
-    backgroundImage.y = display.contentCenterY
+    local background = display.newRect(display.contentCenterX,
+                                       display.contentCenterY,
+                                       display.actualContentWidth,
+                                       display.actualContentHeight)
+    background:setFillColor(color.hex("#c9f3df"))
+
+    appIcon = display.newImageRect("img/appIcon.png", 128, 128)
+    appIcon.x = display.contentCenterX
+    appIcon.y = 120
 
     userInput = native.newTextField(display.contentCenterX,
-                                    display.contentCenterY - 60,
-                                    display.actualContentWidth - 90, 40)
+                                    display.contentCenterY - 50,
+                                    display.actualContentWidth - 30, 40)
     userInput.align = "center"
-    userInput.size = 16
-    userInput:resizeHeightToFitFont()
-    userInput.placeholder = "Usuario"
+    userInput.size = 15
+    -- userInput:resizeHeightToFitFont()
+    userInput.height = 40
+    userInput.placeholder = " Usuario"
 
     passwordInput = native.newTextField(display.contentCenterX,
-                                        userInput.y + 40,
-                                        display.actualContentWidth - 90, 40)
+                                        userInput.y + 50,
+                                        display.actualContentWidth - 30, 40)
     passwordInput.align = "center"
     passwordInput.isSecure = true
-    passwordInput.size = 16
-    passwordInput:resizeHeightToFitFont()
-    passwordInput.placeholder = "Contraseña"
+    passwordInput.size = 15
+    -- passwordInput:resizeHeightToFitFont()
+    passwordInput.height = 40
+    passwordInput.placeholder = " Contraseña"
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
@@ -74,20 +83,26 @@ function scene:create(event)
 
     buttonLogin = widget.newButton({
         x = passwordInput.x,
-        y = passwordInput.y + 80,
+        y = passwordInput.y + 53,
         label = "Iniciar sesión",
-        labelColor = {default = {0, 0, 0}, over = {0, 0, 0, 0.5}},
+        labelColor = {
+            default = {color.hex("#FFFFFF")},
+            over = {color.hex("#e8e8e8")}
+        },
         onEvent = loginButtonHandle,
         id = "login",
         shape = "roundedRect",
-        width = display.contentWidth - 100,
-        height = 40,
+        width = display.contentWidth - 30,
+        height = 45,
         cornerRadius = 3,
-        fillColor = {default = {255, 255, 255, 1}, over = {255, 255, 255, 0.5}}
+        fillColor = {
+            default = {color.hex("#00796B")},
+            over = {color.hex("#004D40")}
+        }
         -- strokeColor = {default = {0, 0, 0, 1}, over = {1, 1, 1, 1}},
         -- strokeWidth = 2
     })
-    sceneGroup:insert(backgroundImage)
+    sceneGroup:insert(background)
     sceneGroup:insert(userInput)
     sceneGroup:insert(passwordInput)
     sceneGroup:insert(buttonLogin)
