@@ -7,16 +7,18 @@ local composer = require("composer")
 local widget = require("widget")
 
 local color = require("lua-color-converter")
+local styles = require("styles.colors")
 
 local utchVirtual = require("lib.utchVirtual")
 
+-- Components importation
+local Button = require("components.button")
+local Input = require("components.input")
+
 local scene = composer.newScene()
 
-local background
-local appIcon
 local userInput
 local passwordInput
-local buttonLogin
 
 ---@param studentTasks Task[]
 local function tasksCallback(studentTasks)
@@ -51,28 +53,13 @@ function scene:create(event)
                                        display.actualContentHeight)
     background:setFillColor(color.hex("#c9f3df"))
 
-    appIcon = display.newImageRect("img/appIcon.png", 128, 128)
+    local appIcon = display.newImageRect("img/appIcon.png", 128, 128)
     appIcon.x = display.contentCenterX
     appIcon.y = 120
 
-    userInput = native.newTextField(display.contentCenterX,
-                                    display.contentCenterY - 50,
-                                    display.actualContentWidth - 30, 40)
-    userInput.align = "center"
-    userInput.size = 15
-    -- userInput:resizeHeightToFitFont()
-    userInput.height = 40
-    userInput.placeholder = " Usuario"
+    userInput = Input(display.contentCenterX, display.contentCenterY - 50, "Usuario")
 
-    passwordInput = native.newTextField(display.contentCenterX,
-                                        userInput.y + 50,
-                                        display.actualContentWidth - 30, 40)
-    passwordInput.align = "center"
-    passwordInput.isSecure = true
-    passwordInput.size = 15
-    -- passwordInput:resizeHeightToFitFont()
-    passwordInput.height = 40
-    passwordInput.placeholder = " Contraseña"
+    passwordInput = Input(display.contentCenterX, userInput.y + 50, "Contraseña")
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
@@ -81,31 +68,14 @@ function scene:create(event)
         end
     end
 
-    buttonLogin = widget.newButton({
-        x = passwordInput.x,
-        y = passwordInput.y + 53,
-        label = "Iniciar sesión",
-        labelColor = {
-            default = {color.hex("#FFFFFF")},
-            over = {color.hex("#e8e8e8")}
-        },
-        onEvent = loginButtonHandle,
-        id = "login",
-        shape = "roundedRect",
-        width = display.contentWidth - 30,
-        height = 45,
-        cornerRadius = 3,
-        fillColor = {
-            default = {color.hex("#00796B")},
-            over = {color.hex("#004D40")}
-        }
-        -- strokeColor = {default = {0, 0, 0, 1}, over = {1, 1, 1, 1}},
-        -- strokeWidth = 2
-    })
+    local loginButton = Button(passwordInput.x, passwordInput.y + 53,
+                               "Iniciar sesión", "login",
+                               {styles.white, styles.green}, loginButtonHandle)
+
     sceneGroup:insert(background)
     sceneGroup:insert(userInput)
     sceneGroup:insert(passwordInput)
-    sceneGroup:insert(buttonLogin)
+    sceneGroup:insert(loginButton)
 end
 
 -- show()
