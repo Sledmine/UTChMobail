@@ -47,19 +47,22 @@ end
 function scene:create(event)
     local sceneGroup = self.view
 
+    -- Create background
     local background = display.newRect(display.contentCenterX,
                                        display.contentCenterY,
                                        display.actualContentWidth,
                                        display.actualContentHeight)
-    background:setFillColor(color.hex("#c9f3df"))
+    background:setFillColor(color.hex("#f5fefa"))
 
     local appIcon = display.newImageRect("img/appIcon.png", 128, 128)
     appIcon.x = display.contentCenterX
     appIcon.y = 120
 
-    userInput = Input(display.contentCenterX, display.contentCenterY - 50, "Usuario")
+    userInput = Input(display.contentCenterX, display.contentCenterY - 50,
+                      "Usuario")
 
-    passwordInput = Input(display.contentCenterX, userInput.y + 50, "Contraseña")
+    passwordInput = Input(display.contentCenterX, userInput.y + 50,
+                          "Contraseña")
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then

@@ -5,6 +5,11 @@
 ------------------------------------------------------------------------------
 inspect = require("inspect")
 
+local color = require("lua-color-converter")
+
+-- Import application components
+local TabBar = require("components.tabBar")
+
 -- Application libraries
 sceneController = require('lib.sceneController')
 
@@ -15,7 +20,7 @@ local utchVirtualTest = require("tests.utchVirtualTest")
 local function onKeyEvent(event)
     -- Print which key was pressed down/up
     local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
-    --print(message)
+    -- print(message)
 
     -- If pressed "f12" key then run unit tests
     if (event.keyName == "f12" and event.phase == "down") then
@@ -25,7 +30,7 @@ local function onKeyEvent(event)
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
     if (event.keyName == 'back') then
         if (system.getInfo('platform') == 'android') then
-            --sceneController.setPreviousScene()
+            -- sceneController.setPreviousScene()
             return false
         end
     end
@@ -38,5 +43,8 @@ end
 -- Add the key event listener
 Runtime:addEventListener('key', onKeyEvent)
 
+-- Create application global tab bar
+ApplicationTabBar = TabBar()
+
 -- Load first application scene
-sceneController.setScene('scenes.loginAlert')
+sceneController.setScene('scenes.login')

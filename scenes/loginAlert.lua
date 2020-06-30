@@ -12,18 +12,13 @@ function scene:create(event)
     local textOptions = {}
     local statusIcon
 
-    local sceneBackground = display.newRect(display.contentCenterX,
-                                            display.contentCenterY,
-                                            display.actualContentWidth,
-                                            display.actualContentHeight)
-    sceneBackground:setFillColor(color.hex("#c9f3df"))
-
     local iconBackground = display.newCircle(display.contentCenterX,
                                              display.contentCenterY - 100, 75)
 
     -- conditional to set the status icons on screen
     if (isErrorLogin) then
-        statusIcon = display.newImageRect(iconBackground,"img/cerrar.png", 100, 100)
+        statusIcon = display.newImageRect(iconBackground, "img/cerrar.png", 100,
+                                          100)
         statusIcon:translate(iconBackground.x, iconBackground.y)
 
         textOptions = {
@@ -37,7 +32,8 @@ function scene:create(event)
         }
 
     else
-        statusIcon = display.newImageRect(iconBackground, "img/comprobar.png", 100, 100)
+        statusIcon = display.newImageRect(iconBackground, "img/comprobar.png",
+                                          100, 100)
         statusIcon:translate(iconBackground.x + 5, iconBackground.y)
 
         textOptions = {
@@ -55,7 +51,8 @@ function scene:create(event)
     local statusText = display.newText(textOptions)
     statusText:setFillColor(color.hex("#000000"))
 
-    local textBackground = display.newRoundedRect(statusText.x, statusText.y, statusText.width + 10, 80, 8)
+    local textBackground = display.newRoundedRect(statusText.x, statusText.y,
+                                                  statusText.width + 10, 80, 8)
 
     sceneGroup:insert(iconBackground)
     sceneGroup:insert(textBackground)
