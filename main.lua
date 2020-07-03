@@ -8,7 +8,7 @@ inspect = require("inspect")
 local color = require("lua-color-converter")
 
 -- Import application components
-local TabBar = require("components.tabBar")
+TabBar = require("components.tabBar")
 
 -- Application libraries
 sceneController = require('lib.sceneController')
@@ -45,6 +45,7 @@ Runtime:addEventListener('key', onKeyEvent)
 
 -- Create application global tab bar
 ApplicationTabBar = TabBar()
+ApplicationTabBar.isVisible = false
 
 -- Load first application scene
 sceneController.setScene('scenes.login')

@@ -5,40 +5,43 @@
 ------------------------------------------------------------------------------
 local widget = require("widget")
 
-local function onFirstView(event) print("Estás en la página 1") end
+-- Application libraries
+sceneController = require('lib.sceneController')
 
-local function onSecondView(event) print("Estás en la página 2") end
-
-local function onThirdView(event) print("Estás en la página 3") end
-
-local tabButtons = {
-    {
-        label = "",
-        defaultFile = "img/home.png",
-        overFile = "img/home.png",
-        width = 32,
-        height = 32,
-        onPress = onFirstView,
-        selected = true
-    }, {
-        label = "",
-        defaultFile = "img/list.png",
-        overFile = "img/list.png",
-        width = 32,
-        height = 32,
-        onPress = onSecondView
-    }, {
-        label = "",
-        defaultFile = "img/settings.png",
-        overFile = "img/settings.png",
-        width = 32,
-        height = 32,
-        onPress = onThirdView
-    }
-}
+-- Current instance of the tabBar
+local tabBarInstance
 
 local function tabBar(buttons)
-    return widget.newTabBar {
+
+    local tabButtons = {
+        {
+            label = "",
+            defaultFile = "img/buttons/home.png",
+            overFile = "img/buttons/home.png",
+            width = 32,
+            height = 32,
+            onPress = function()
+                sceneController.setScene("scenes.login")
+            end
+        }, {
+            label = "",
+            defaultFile = "img/buttons/list.png",
+            overFile = "img/buttons/list.png",
+            width = 32,
+            height = 32,
+            onPress = nil,
+            selected = true
+        }, {
+            label = "",
+            defaultFile = "img/buttons/settings.png",
+            overFile = "img/buttons/settings.png",
+            width = 32,
+            height = 32,
+            onPress = nil
+        }
+    }
+
+    tabBarInstance = tabBarInstance or widget.newTabBar {
         top = display.contentHeight - 50,
         height = 50,
         backgroundFile = "img/tabBar.png",
@@ -49,7 +52,8 @@ local function tabBar(buttons)
         tabSelectedFrameHeight = 120,
         buttons = tabButtons
     }
-end
 
+    return tabBarInstance
+end
 
 return tabBar

@@ -47,12 +47,21 @@ end
 function scene:create(event)
     local sceneGroup = self.view
 
+    -- Hide application global tab bar
+    ApplicationTabBar.isVisible = false
+
     -- Create background
     local background = display.newRect(display.contentCenterX,
                                        display.contentCenterY,
                                        display.actualContentWidth,
                                        display.actualContentHeight)
-    background:setFillColor(color.hex("#f5fefa"))
+    background:setFillColor(color.hex("#B2DFDB"))
+
+    local details = display.newImageRect("img/background.png",
+                                         display.actualContentWidth,
+                                         display.actualContentHeight)
+    details.x = display.contentCenterX
+    details.y = display.contentCenterY
 
     local appIcon = display.newImageRect("img/appIcon.png", 128, 128)
     appIcon.x = display.contentCenterX
@@ -62,7 +71,14 @@ function scene:create(event)
                       "Usuario")
 
     passwordInput = Input(display.contentCenterX, userInput.y + 50,
-                          "Contraseña")
+                          "Contraseña", true)
+                          passwordInput.text = "pchack123"
+
+    local aboutText = display.newText("Aplicación no oficial de la UTCh",
+                                      display.contentCenterX,
+                                      display.actualContentHeight - 30,
+                                      native.systemFont, 16)
+    aboutText:setFillColor(styles.plain.white)
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
@@ -73,12 +89,16 @@ function scene:create(event)
 
     local loginButton = Button(passwordInput.x, passwordInput.y + 53,
                                "Iniciar sesión", "login",
-                               {styles.white, styles.green}, loginButtonHandle)
+                               {styles.composed.white, styles.composed.green},
+                               loginButtonHandle)
 
     sceneGroup:insert(background)
+    sceneGroup:insert(details)
+    sceneGroup:insert(appIcon)
     sceneGroup:insert(userInput)
     sceneGroup:insert(passwordInput)
     sceneGroup:insert(loginButton)
+    -- sceneGroup:insert(aboutText)
 end
 
 -- show()

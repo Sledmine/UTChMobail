@@ -4,7 +4,6 @@
 -- Module to gather data from UTCh Virtual
 ------------------------------------------------------------------------------
 local htmlParser = require("htmlparser")
-local inspect = require("inspect")
 local glue = require("glue")
 
 -- Entities

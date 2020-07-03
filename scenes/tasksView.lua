@@ -1,12 +1,24 @@
 local composer = require("composer")
-local color = require("convertcolor")
 local widget = require("widget")
+
+local color = require("lua-color-converter")
+local styles = require("styles.colors")
+
+-- Import application components
 
 local scene = composer.newScene()
 
 function scene:create(event)
     local sceneGroup = self.view
     local sceneParams = event.params
+
+    -- Create background
+    local background = display.newRect(display.contentCenterX,
+                                       display.contentCenterY,
+                                       display.actualContentWidth,
+                                       display.actualContentHeight)
+    background:setFillColor(styles.plain.white)
+    sceneGroup:insert(background)
 
     -- Creation of the tableView containing the student tasks
     local function onRowRender(event)
@@ -42,20 +54,30 @@ function scene:create(event)
             onRowRender = onRowRender,
             hideBackground = true
         })
+    sceneGroup:insert(tableView)
 
     -- in this section we can change the individual row options}
     local studentTasks = sceneParams.studentTasks
-    print(inspect(studentTasks))
-    if (studentTasks) then
+    if (studentTasks and #studentTasks > 0) then
         for studentTaskIndex, studentTask in pairs(studentTasks) do
             tableView:insertRow{
-                rowColor = {default = {color.hex("#FDF4FE")}},
+                rowColor = {default = {styles.plain.white}},
                 rowHeight = 150,
                 params = {studentTask = studentTask}
             }
         end
+    else
+        local noTasks = display.newText("No hay tareas que mostrar.",
+                                        display.contentCenterX,
+                                        display.contentCenterY,
+                                        native.systemFont, 16)
+        noTasks:setFillColor(0,0,0)
+        sceneGroup:insert(noTasks)
     end
 
+    -- Show application tab bar
+    ApplicationTabBar:toFront()
+    ApplicationTabBar.isVisible = true
 end
 
 -- show()

@@ -54,7 +54,8 @@ end
 ---@param date string
 ---@param link string
 function Task:initialize(title, date, link)
-    self.title = cleanTaskTitle(title)
+    -- Try to see if this is not giving us problems
+    self.title = Task:setDate(date)
     self.date = epochToDateString(date)
     self.link = link
 end
