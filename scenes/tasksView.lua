@@ -17,7 +17,7 @@ function scene:create(event)
                                        display.contentCenterY,
                                        display.actualContentWidth,
                                        display.actualContentHeight)
-    background:setFillColor(styles.plain.white)
+    background:setFillColor(color.hex(styles.plain.white))
     sceneGroup:insert(background)
 
     -- Creation of the tableView containing the student tasks
@@ -57,7 +57,7 @@ function scene:create(event)
     sceneGroup:insert(tableView)
 
     -- in this section we can change the individual row options}
-    local studentTasks = sceneParams.studentTasks
+    local studentTasks = {}--sceneParams.studentTasks
     if (studentTasks and #studentTasks > 0) then
         for studentTaskIndex, studentTask in pairs(studentTasks) do
             tableView:insertRow{
@@ -71,7 +71,7 @@ function scene:create(event)
                                         display.contentCenterX,
                                         display.contentCenterY,
                                         native.systemFont, 16)
-        noTasks:setFillColor(0,0,0)
+        noTasks:setFillColor(color.hex(styles.plain.gray))
         sceneGroup:insert(noTasks)
     end
 

@@ -23,9 +23,9 @@ colors.composed = {
 }
 
 colors.plain = {
-    white = color.hex("#fafafa"),
-    gray = color.hex("#263238"),
-    test = color.hex("#00E5FF")
+    white = "#fafafa",
+    gray = "#263238",
+    test = "#00E5FF"
 }
 
 return colors

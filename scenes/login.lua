@@ -10,6 +10,7 @@ local color = require("lua-color-converter")
 local styles = require("styles.colors")
 
 local utchVirtual = require("lib.utchVirtual")
+local glue = require("glue")
 
 -- Components importation
 local Button = require("components.button")
@@ -55,7 +56,7 @@ function scene:create(event)
                                        display.contentCenterY,
                                        display.actualContentWidth,
                                        display.actualContentHeight)
-    background:setFillColor(color.hex("#B2DFDB"))
+    background:setFillColor(color.hex(styles.plain.white))
 
     local details = display.newImageRect("img/background.png",
                                          display.actualContentWidth,
@@ -72,13 +73,12 @@ function scene:create(event)
 
     passwordInput = Input(display.contentCenterX, userInput.y + 50,
                           "Contraseña", true)
-                          passwordInput.text = "pchack123"
 
     local aboutText = display.newText("Aplicación no oficial de la UTCh",
                                       display.contentCenterX,
                                       display.actualContentHeight - 30,
                                       native.systemFont, 16)
-    aboutText:setFillColor(styles.plain.white)
+    aboutText:setFillColor(color.hex(styles.plain.white))
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
