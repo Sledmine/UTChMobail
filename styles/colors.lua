@@ -24,8 +24,7 @@ colors.composed = {
 
 colors.plain = {
     white = "#fafafa",
-    gray = "#263238",
-    test = "#00E5FF"
+    gray = "#263238"
 }
 
 return colors
