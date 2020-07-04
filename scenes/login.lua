@@ -5,6 +5,7 @@
 ------------------------------------------------------------------------------
 local composer = require("composer")
 local widget = require("widget")
+local json = require("json")
 
 local color = require("lua-color-converter")
 local styles = require("styles.colors")
@@ -80,10 +81,28 @@ function scene:create(event)
                                       native.systemFont, 16)
     aboutText:setFillColor(color.hex(styles.plain.white))
 
+    local function storeCredentials()
+        local credentials = {["user"] = userInput.text, ["password"] = passwordInput.text}
+        local encodedData = json.encode(credentials)
+        local path = system.pathForFile("credentials.json", system.ApplicationSupportDirectory)
+        local json, reason = io.open(path, "r")
+
+        print("Intentando crear json...")
+
+        if(json) then
+            json:write(encodedData)
+            io.close(json)
+            print("Json creado y almacenado!")
+        else
+            print("Algo salio mal " .. reason)
+        end
+    end
+
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
             -- sceneController.setScene("scenes.tasksView")
             utchVirtual.getToken(tokenCallback)
+            storeCredentials()
         end
     end
 
