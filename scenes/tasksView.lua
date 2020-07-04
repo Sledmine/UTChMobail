@@ -32,16 +32,27 @@ function scene:create(event)
         local rowWidth = row.actualContentWidth
 
         local taskTitle = studentTask:getTitle()
+        local taskDate = studentTask:getDate()
         -- after the x and y params, we can define the limits of the text
         local rowTaskTitle = display.newText(row, taskTitle,
                                              display.contentCenterX, 20,
                                              display.actualContentWidth - 30,
                                              60, nil, 16)
-        rowTaskTitle:setFillColor(0)
+        rowTaskTitle:setFillColor(color.hex(styles.plain.gray))
         rowTaskTitle.anchorX = 0
         rowTaskTitle.anchorY = 0
         rowTaskTitle.x = 20
         rowTaskTitle.y = 20
+
+        local rowTaskDate = display.newText(row, taskDate,
+                                             display.contentCenterX, 20,
+                                             display.actualContentWidth - 30,
+                                             60, nil, 16)
+                                             rowTaskDate:setFillColor(color.hex(styles.plain.gray))
+                                             rowTaskDate.anchorX = 0
+                                             rowTaskDate.anchorY = 0
+        rowTaskDate.x = 20
+        rowTaskDate.y = rowTaskTitle.y + 60
     end
 
     -- table view options
@@ -57,22 +68,22 @@ function scene:create(event)
     sceneGroup:insert(tableView)
 
     -- in this section we can change the individual row options}
-    local studentTasks = {}--sceneParams.studentTasks
+    local studentTasks = sceneParams.studentTasks
     if (studentTasks and #studentTasks > 0) then
         for studentTaskIndex, studentTask in pairs(studentTasks) do
             tableView:insertRow{
-                rowColor = {default = {styles.plain.white}},
+                rowColor = styles.composed.white,
                 rowHeight = 150,
                 params = {studentTask = studentTask}
             }
         end
     else
-        local noTasks = display.newText("No hay tareas que mostrar.",
-                                        display.contentCenterX,
-                                        display.contentCenterY,
-                                        native.systemFont, 16)
-        noTasks:setFillColor(color.hex(styles.plain.gray))
-        sceneGroup:insert(noTasks)
+        local noTasksLabel = display.newText("No hay tareas que mostrar.",
+                                             display.contentCenterX,
+                                             display.contentCenterY,
+                                             native.systemFont, 16)
+        noTasksLabel:setFillColor(color.hex(styles.plain.gray))
+        sceneGroup:insert(noTasksLabel)
     end
 
     -- Show application tab bar

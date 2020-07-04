@@ -21,7 +21,8 @@ local dayweeks = {
 }
 
 local function epochToDateString(epochDate)
-    local formattedDate = os.date("%A %e/%m/%Y a las %H:%M UTC", tonumber(epochDate))
+    local formattedDate = os.date("%A %d/%m/%Y a las %H:%M UTC", tonumber(epochDate))
+    --local formattedDate = os.date("%H:%M UTC", tonumber(epochDate))
     for dayname, translation in pairs(dayweeks) do
         if (formattedDate:find(dayname)) then
             formattedDate = string.gsub(formattedDate, dayname, translation)
@@ -32,7 +33,7 @@ end
 
 local function cleanTaskTitle(title)
     local cleanedTitle = title
-    cleanedTitle = string.gsub(title, "está en fecha de entrega", "")
+    cleanedTitle = string.gsub(title, " está en fecha de entrega", "")
     return cleanedTitle
 end
 
@@ -55,8 +56,8 @@ end
 ---@param link string
 function Task:initialize(title, date, link)
     -- Try to see if this is not giving us problems
-    self.title = Task:setDate(date)
-    self.date = epochToDateString(date)
+    self:setTitle(title)
+    self:setDate(date)
     self.link = link
 end
 

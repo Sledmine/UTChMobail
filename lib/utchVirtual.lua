@@ -8,7 +8,7 @@ local glue = require("glue")
 
 -- Entities
 local Task = require("entities.task")
-local httpEvent = require("entities.httpEvent")
+local HTTPEvent = require("entities.httpEvent")
 
 -- Module
 local utchVirtual = {}
@@ -123,7 +123,8 @@ local function parseTasks(event)
             local singleTask = Task:new(taskName, taskDate, taskUrl)
 
             -- Append to the list the new task
-            glue.append(studentTasks, singleTask)
+            studentTasks[#studentTasks+1] = singleTask
+            --glue.append(studentTasks, singleTask)
         end
 
         return studentTasks
@@ -145,7 +146,7 @@ end
 -- Listener to recieve async HTTP response
 ---@param eventObject table
 local function networkListener(eventObject)
-    local event = httpEvent:new(eventObject)
+    local event = HTTPEvent:new(eventObject)
     if (event.isError) then
         -- print(inspect(eventObject))
         print('Network error: ', event.response)

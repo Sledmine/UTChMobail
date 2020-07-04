@@ -5,7 +5,7 @@
 ------------------------------------------------------------------------------
 local class = require("middleclass")
 
----@class httpEvent
+---@class HTTPEvent
 local httpEvent = class("httpEvent")
 
 function httpEvent:initialize(event)

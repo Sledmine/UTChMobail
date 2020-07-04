@@ -13,9 +13,6 @@ TabBar = require("components.tabBar")
 -- Application libraries
 sceneController = require('lib.sceneController')
 
--- Import unit tests
-local utchVirtualTest = require("tests.utchVirtualTest")
-
 -- Called when a key event has been received
 local function onKeyEvent(event)
     -- Print which key was pressed down/up
@@ -24,7 +21,6 @@ local function onKeyEvent(event)
 
     -- If pressed "f12" key then run unit tests
     if (event.keyName == "f12" and event.phase == "down") then
-        utchVirtualTest()
     end
 
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
