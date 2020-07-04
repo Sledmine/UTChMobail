@@ -14,16 +14,15 @@ local tabBarInstance
 local function tabBar(buttons)
 
     local tabButtons = {
-        {
+        --[[{
             label = "",
             defaultFile = "img/buttons/home.png",
             overFile = "img/buttons/home.png",
             width = 32,
             height = 32,
-            onPress = function()
-                sceneController.setScene("scenes.login")
-            end
-        }, {
+            onPress = nil
+        }, ]]
+        {
             label = "",
             defaultFile = "img/buttons/list.png",
             overFile = "img/buttons/list.png",
@@ -37,7 +36,9 @@ local function tabBar(buttons)
             overFile = "img/buttons/settings.png",
             width = 32,
             height = 32,
-            onPress = nil
+            onPress = function()
+                sceneController.setScene("scenes.login")
+            end
         }
     }
 

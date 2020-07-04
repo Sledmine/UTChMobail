@@ -19,23 +19,42 @@ local Input = require("components.input")
 
 local scene = composer.newScene()
 
+-- These objects are special inputs and we need to share them across the scene
 local userInput
 local passwordInput
 
+-- Callbacks creation
+-- TODO: Implement redux to provide better async state handle and remove function callbacks
+
+--- Callback to handle parsed tasks from UTCh Virtual module
 ---@param studentTasks Task[]
 local function tasksCallback(studentTasks)
     local options = {params = {studentTasks = studentTasks}}
     sceneController.setScene("scenes.tasksView", options)
 end
 
+--- Callback to handle login success from UTCh Virtual module
 local function loginCallback(cookie)
     if (cookie) then
+        -- Get current app config
+        local newConfig = appConfig.get()
+
+        -- Update config fields
+        newConfig.userName = userInput.text
+        newConfig.password = passwordInput.text
+
+        -- Save app config
+        appConfig.set(newConfig)
+
+        -- Get tasks async with a callback
         utchVirtual.getTasks(tasksCallback)
     else
+        -- TODO: Change this to a screen in the app
         print("Error at trying to log in!")
     end
 end
 
+--- Callback to handle parsed token from UTCh Virtual module
 ---@param token string
 local function tokenCallback(token)
     if (token) then
@@ -71,9 +90,13 @@ function scene:create(event)
 
     userInput = Input(display.contentCenterX, display.contentCenterY - 50,
                       "Usuario")
+    -- Load previous user name in app config
+    userInput.text = appConfig.get().userName or ""
 
     passwordInput = Input(display.contentCenterX, userInput.y + 50,
                           "Contraseña", true)
+    -- Load previous password in app config
+    passwordInput.text = appConfig.get().password or ""
 
     local aboutText = display.newText("Aplicación no oficial de la UTCh",
                                       display.contentCenterX,

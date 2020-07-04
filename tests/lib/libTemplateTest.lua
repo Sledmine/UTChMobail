@@ -11,16 +11,16 @@ local inspect = require("inspect")
 myModule = require("myModule")
 
 -- Prepare tests collection
-test_AppConfig = {}
+test_MyModule = {}
 
 
 -- On first test run set up
-function test_AppConfig:setUp()
+function test_MyModule:setUp()
     self.utilOrExpectedValue = expected
 end
 
 -- Test some lib feature
-function test_AppConfig:test_myFeature()
+function test_MyModule:test_myFeature()
     lu.assertEquals(current, expected)
 end
 

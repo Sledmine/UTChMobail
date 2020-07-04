@@ -20,13 +20,12 @@ local lastCookie = ""
 local returnCallback = nil
 local process = nil
 
-local function substractCookie(cookie)
-    return glue.string.split(';', cookie)[1]
-end
+local function substractCookie(cookie) return glue.string.split(';', cookie)[1] end
 
 --- Parse token from an http response
 local function parseToken(event)
     if (not event.isError) then
+        -- UTCh Virtual send us back a cookie to match with our token in order to keep it alive
         local SetCookie
         if (event.responseHeaders) then
             SetCookie = event.responseHeaders['Set-Cookie']
@@ -54,6 +53,7 @@ end
 --- Parse cookie from an http response
 local function parseCookie(event)
     if (not event.isError) then
+        -- We need to get the new cookie if our login is success
         local SetCookie
         if (event.responseHeaders) then
             SetCookie = event.responseHeaders['Set-Cookie']
@@ -123,10 +123,11 @@ local function parseTasks(event)
             local singleTask = Task:new(taskName, taskDate, taskUrl)
 
             -- Append to the list the new task
-            studentTasks[#studentTasks+1] = singleTask
-            --glue.append(studentTasks, singleTask)
+            studentTasks[#studentTasks + 1] = singleTask
+            -- glue.append(studentTasks, singleTask)
         end
-
+        -- THIS IS NO OK.. OK?, HARD REMOVING COOKIE TO FORCE SESSION TO EXPIRE AND RELOGIN IF NEED
+        lastCookie = ""
         return studentTasks
     end
     return nil

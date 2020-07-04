@@ -5,6 +5,8 @@
 ------------------------------------------------------------------------------
 inspect = require("inspect")
 
+-- Functional or project libs
+appConfig = require("lib.appConfig")
 local color = require("lua-color-converter")
 
 -- Import application components
