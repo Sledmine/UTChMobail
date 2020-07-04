@@ -44,3 +44,6 @@ luac.out
 
 # Solar 2D
 .CoronaLiveBuild
+
+# Application config
+settings.json
