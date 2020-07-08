@@ -78,7 +78,7 @@ function scene:create(event)
             }
         end
     else
-        local noTasksLabel = display.newText("No hay tareas que mostrar.",
+        local noTasksLabel = display.newText("No hay tareas pendientes.",
                                              display.contentCenterX,
                                              display.contentCenterY,
                                              native.systemFont, 16)

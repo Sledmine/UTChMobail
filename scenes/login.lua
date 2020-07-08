@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 -- Login
--- Author: Gelatinoso
+-- Author: Sledmnine
 -- Login scene for UTCh Virtual data
 ------------------------------------------------------------------------------
 local composer = require("composer")
@@ -29,7 +29,9 @@ local passwordInput
 --- Callback to handle parsed tasks from UTCh Virtual module
 ---@param studentTasks Task[]
 local function tasksCallback(studentTasks)
-    local options = {params = {studentTasks = studentTasks}}
+    local options = {
+        params = {studentTasks = studentTasks},
+    }
     sceneController.setScene("scenes.tasksView", options)
 end
 
@@ -50,6 +52,13 @@ local function loginCallback(cookie)
         utchVirtual.getTasks(tasksCallback)
     else
         -- TODO: Change this to a screen in the app
+        local options = {
+            params = {
+                isSuccess = false,
+                message = "Error al intentar iniciar sesión",
+            },
+        }
+        sceneController.setScene("scenes.alert", options)
         print("Error at trying to log in!")
     end
 end
@@ -59,8 +68,7 @@ end
 local function tokenCallback(token)
     if (token) then
         if (userInput.text ~= "" and passwordInput.text ~= "") then
-            utchVirtual.login(userInput.text, passwordInput.text, token,
-                              loginCallback)
+            utchVirtual.login(userInput.text, passwordInput.text, token, loginCallback)
         end
     end
 end
@@ -72,37 +80,36 @@ function scene:create(event)
     ApplicationTabBar.isVisible = false
 
     -- Create background
-    local background = display.newRect(display.contentCenterX,
-                                       display.contentCenterY,
-                                       display.actualContentWidth,
-                                       display.actualContentHeight)
+    local background = display.newRect(display.contentCenterX, display.contentCenterY,
+                                       display.actualContentWidth, display.actualContentHeight)
     background:setFillColor(color.hex(styles.plain.white))
+    sceneGroup:insert(background)
 
-    local details = display.newImageRect("img/background.png",
-                                         display.actualContentWidth,
+    local details = display.newImageRect("img/background.png", display.actualContentWidth,
                                          display.actualContentHeight)
     details.x = display.contentCenterX
     details.y = display.contentCenterY
+    sceneGroup:insert(details)
 
     local appIcon = display.newImageRect("img/appIcon.png", 128, 128)
     appIcon.x = display.contentCenterX
     appIcon.y = 120
+    sceneGroup:insert(appIcon)
 
-    userInput = Input(display.contentCenterX, display.contentCenterY - 50,
-                      "Usuario")
+    userInput = Input(display.contentCenterX, display.contentCenterY - 50, "Usuario")
     -- Load previous user name in app config
     userInput.text = appConfig.get().userName or ""
+    sceneGroup:insert(userInput)
 
-    passwordInput = Input(display.contentCenterX, userInput.y + 50,
-                          "Contraseña", true)
+    passwordInput = Input(display.contentCenterX, userInput.y + 50, "Contraseña", true)
     -- Load previous password in app config
     passwordInput.text = appConfig.get().password or ""
+    sceneGroup:insert(passwordInput)
 
-    local aboutText = display.newText("Aplicación no oficial de la UTCh",
-                                      display.contentCenterX,
-                                      display.actualContentHeight - 30,
-                                      native.systemFont, 16)
+    local aboutText = display.newText("Aplicación no oficial de la UTCh", display.contentCenterX,
+                                      display.actualContentHeight - 30, native.systemFont, 16)
     aboutText:setFillColor(color.hex(styles.plain.white))
+    sceneGroup:insert(aboutText)
 
     local function loginButtonHandle(event)
         if ("ended" == event.phase) then
@@ -111,18 +118,13 @@ function scene:create(event)
         end
     end
 
-    local loginButton = Button(passwordInput.x, passwordInput.y + 53,
-                               "Iniciar sesión", "login",
-                               {styles.composed.white, styles.composed.green},
-                               loginButtonHandle)
-
-    sceneGroup:insert(background)
-    sceneGroup:insert(details)
-    sceneGroup:insert(appIcon)
-    sceneGroup:insert(userInput)
-    sceneGroup:insert(passwordInput)
+    local loginButton = Button(passwordInput.x, passwordInput.y + 53, "Iniciar sesión", "login",
+                               {
+        styles.composed.white,
+        styles.composed.green,
+    }, loginButtonHandle)
     sceneGroup:insert(loginButton)
-    -- sceneGroup:insert(aboutText)
+
 end
 
 -- show()

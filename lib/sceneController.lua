@@ -25,8 +25,8 @@ function sceneController.setPreviousScene(options)
         local currentScene = composer.getSceneName('current')
         if (currentScene) then
             composer.removeScene(currentScene)
-            composer.gotoScene(previousScene, options)
         end
+        composer.gotoScene(previousScene, options)
     end
 end
 

@@ -37,7 +37,7 @@ local function tabBar(buttons)
             width = 32,
             height = 32,
             onPress = function()
-                sceneController.setScene("scenes.login")
+                sceneController.setPreviousScene()
             end
         }
     }

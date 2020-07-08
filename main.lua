@@ -28,7 +28,7 @@ local function onKeyEvent(event)
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
     if (event.keyName == 'back') then
         if (system.getInfo('platform') == 'android') then
-            -- sceneController.setPreviousScene()
+            sceneController.setPreviousScene()
             return false
         end
     end
