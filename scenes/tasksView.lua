@@ -10,7 +10,8 @@ local scene = composer.newScene()
 
 function scene:create(event)
     local sceneGroup = self.view
-    local sceneParams = event.params
+    -- Important to set empty table by default
+    local sceneParams = event.params or {}
 
     -- Create background
     local background = display.newRect(display.contentCenterX,

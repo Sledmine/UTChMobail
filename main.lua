@@ -13,7 +13,7 @@ local color = require("lua-color-converter")
 TabBar = require("components.tabBar")
 
 -- Application libraries
-sceneController = require('lib.sceneController')
+sceneController = require("lib.sceneController")
 
 -- Called when a key event has been received
 local function onKeyEvent(event)
@@ -26,10 +26,9 @@ local function onKeyEvent(event)
     end
 
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
-    if (event.keyName == 'back') then
-        if (system.getInfo('platform') == 'android') then
-            sceneController.setPreviousScene()
-            return false
+    if (event.keyName == "back" and event.phase == "down") then
+        if (system.getInfo("platform") == "android") then
+            return sceneController.setPreviousScene()
         end
     end
 
@@ -39,11 +38,11 @@ local function onKeyEvent(event)
 end
 
 -- Add the key event listener
-Runtime:addEventListener('key', onKeyEvent)
+Runtime:addEventListener("key", onKeyEvent)
 
 -- Create application global tab bar
 ApplicationTabBar = TabBar()
 ApplicationTabBar.isVisible = false
 
 -- Load first application scene
-sceneController.setScene('scenes.login')
+sceneController.setScene("scenes.login")
