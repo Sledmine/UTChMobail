@@ -8,6 +8,7 @@ inspect = require("inspect")
 -- Functional or project libs
 appConfig = require("lib.appConfig")
 local color = require("lua-color-converter")
+local log = require("lib.log")
 
 -- Import application components
 TabBar = require("components.tabBar")
@@ -28,6 +29,8 @@ local function onKeyEvent(event)
     -- If the "back" key was pressed on Android, prevent it from backing out of the app
     if (event.keyName == "back" and event.phase == "down") then
         if (system.getInfo("platform") == "android") then
+            -- Return the result of the try of setting the previous scene
+            -- If there is a previous scene intercept the button
             return sceneController.setPreviousScene()
         end
     end

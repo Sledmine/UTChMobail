@@ -6,7 +6,7 @@
 local widget = require("widget")
 
 -- Application libraries
-sceneController = require('lib.sceneController')
+sceneController = require("lib.sceneController")
 
 -- Current instance of the tabBar
 local tabBarInstance
@@ -29,17 +29,18 @@ local function tabBar(buttons)
             width = 32,
             height = 32,
             onPress = nil,
-            selected = true
-        }, {
+            selected = true,
+        },
+        {
             label = "",
-            defaultFile = "img/buttons/settings.png",
-            overFile = "img/buttons/settings.png",
+            defaultFile = "img/buttons/back.png",
+            overFile = "img/buttons/back.png",
             width = 32,
             height = 32,
-            onPress = function()
+            onPress = function(event)
                 sceneController.setPreviousScene()
-            end
-        }
+            end,
+        },
     }
 
     tabBarInstance = tabBarInstance or widget.newTabBar {
@@ -51,7 +52,7 @@ local function tabBar(buttons)
         tabSelectedMiddleFile = "img/tabBarSelected.png",
         tabSelectedFrameWidth = 40,
         tabSelectedFrameHeight = 120,
-        buttons = tabButtons
+        buttons = tabButtons,
     }
 
     return tabBarInstance

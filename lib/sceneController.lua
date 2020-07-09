@@ -7,7 +7,7 @@ local composer = require("composer")
 
 local sceneController = {}
 
---- Set a scene to render it on screen, optional destroy current scene
+--- Set a scene to render it on screen, optional params for next scene
 ---@param newScene string
 ---@param options table
 function sceneController.setScene(newScene, options)
@@ -18,7 +18,7 @@ function sceneController.setScene(newScene, options)
     composer.gotoScene(newScene, options)
 end
 
---- Go back to the last rendered scene, optional destroy current scene
+--- Go back to the last rendered scene, optional params for next scene
 ---@param options table
 ---@return boolean
 function sceneController.setPreviousScene(options)

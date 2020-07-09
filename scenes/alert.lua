@@ -63,8 +63,14 @@ function scene:create(event)
     sceneGroup:insert(statusText)
 
     local backButton = Button(textBackground.x, textBackground.y + textBackground.height + 10,
-                              "Volver al inicio de sesión", "backButton", {styles.composed.white, styles.composed.green}, function()
-        sceneController.setPreviousScene()
+                              "Volver al inicio de sesión", "backButton",
+                              {
+        styles.composed.white,
+        styles.composed.green,
+    }, function(event)
+        if (event.phase == "ended") then
+            sceneController.setPreviousScene()
+        end
     end)
     sceneGroup:insert(backButton)
 end

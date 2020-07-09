@@ -5,6 +5,7 @@ local color = require("lua-color-converter")
 local styles = require("styles.colors")
 
 -- Import application components
+local TaskCard = require("components.taskCard")
 
 local scene = composer.newScene()
 
@@ -14,75 +15,43 @@ function scene:create(event)
     local sceneParams = event.params or {}
 
     -- Create background
-    local background = display.newRect(display.contentCenterX,
-                                       display.contentCenterY,
-                                       display.actualContentWidth,
-                                       display.actualContentHeight)
-    background:setFillColor(color.hex(styles.plain.white))
+    local background = display.newRect(display.contentCenterX, display.contentCenterY,
+                                       display.actualContentWidth, display.actualContentHeight)
+    background:setFillColor(color.hex(styles.plain.gray))
     sceneGroup:insert(background)
 
-    -- Creation of the tableView containing the student tasks
-    local function onRowRender(event)
-        local row = event.row
-        local rowParams = event.row.params
-
-        ---@type Task
-        local studentTask = rowParams.studentTask
-
-        local rowHeight = row.actualContentHeight
-        local rowWidth = row.actualContentWidth
-
-        local taskTitle = studentTask:getTitle()
-        local taskDate = studentTask:getDate()
-        -- after the x and y params, we can define the limits of the text
-        local rowTaskTitle = display.newText(row, taskTitle,
-                                             display.contentCenterX, 20,
-                                             display.actualContentWidth - 30,
-                                             60, nil, 16)
-        rowTaskTitle:setFillColor(color.hex(styles.plain.gray))
-        rowTaskTitle.anchorX = 0
-        rowTaskTitle.anchorY = 0
-        rowTaskTitle.x = 20
-        rowTaskTitle.y = 20
-
-        local rowTaskDate = display.newText(row, taskDate,
-                                             display.contentCenterX, 20,
-                                             display.actualContentWidth - 30,
-                                             60, nil, 16)
-                                             rowTaskDate:setFillColor(color.hex(styles.plain.gray))
-                                             rowTaskDate.anchorX = 0
-                                             rowTaskDate.anchorY = 0
-        rowTaskDate.x = 20
-        rowTaskDate.y = rowTaskTitle.y + 60
-    end
+    local details = display.newImageRect("img/background.png", display.actualContentWidth,
+                                         display.actualContentHeight)
+    details.x = display.contentCenterX
+    details.y = display.contentCenterY
+    sceneGroup:insert(details)
 
     -- table view options
-    local tableView = widget.newTableView(
-                          {
-            x = display.contentCenterX,
-            y = display.contentCenterY,
-            width = display.actualContentWidth,
-            heigth = display.actualContentHeight,
-            onRowRender = onRowRender,
-            hideBackground = true
-        })
+    local tableView = widget.newTableView({
+        x = display.contentCenterX,
+        y = display.contentCenterY,
+        width = display.actualContentWidth,
+        heigth = display.actualContentHeight,
+        onRowRender = TaskCard,
+        hideBackground = true,
+    })
     sceneGroup:insert(tableView)
 
-    -- in this section we can change the individual row options}
+    -- Create rows for every task
     local studentTasks = sceneParams.studentTasks
     if (studentTasks and #studentTasks > 0) then
         for studentTaskIndex, studentTask in pairs(studentTasks) do
-            tableView:insertRow{
-                rowColor = styles.composed.white,
-                rowHeight = 150,
-                params = {studentTask = studentTask}
-            }
+            tableView:insertRow({
+                rowColor = styles.composed.hope,
+                rowHeight = 210,
+                params = {
+                    studentTask = studentTask,
+                },
+            })
         end
     else
-        local noTasksLabel = display.newText("No hay tareas pendientes.",
-                                             display.contentCenterX,
-                                             display.contentCenterY,
-                                             native.systemFont, 16)
+        local noTasksLabel = display.newText("No hay tareas pendientes.", display.contentCenterX,
+                                             display.contentCenterY, native.systemFont, 16)
         noTasksLabel:setFillColor(color.hex(styles.plain.gray))
         sceneGroup:insert(noTasksLabel)
     end
@@ -90,6 +59,7 @@ function scene:create(event)
     -- Show application tab bar
     ApplicationTabBar:toFront()
     ApplicationTabBar.isVisible = true
+    ApplicationTabBar:setSelected(1)
 end
 
 -- show()
