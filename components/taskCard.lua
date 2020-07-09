@@ -21,6 +21,7 @@ local function taskCard(event)
 
     local taskTitle = studentTask:getTitle()
     local taskDate = studentTask:getDate()
+    local taskUrl = studentTask:getLink()
     -- after the x and y params, we can define the limits of the text
     local rowTaskTitle = display.newText(row, taskTitle, display.contentCenterX, 20,
                                          display.actualContentWidth - 30, 60, nil, 15)
@@ -51,10 +52,13 @@ local function taskCard(event)
     local urlButton = Button(display.contentCenterX, rowTaskDate.y + 70, "Más información",
                              "urlButton", {
         styles.composed.white,
-        styles.composed.green,
+        styles.composed.orange,
     }, function(event)
         if (event.phase == "ended") then
-            print("Test")
+
+            local webView = native.newWebView(display.contentCenterX, display.contentCenterY - 25, 320,
+                                              520)
+            webView:request(taskUrl)
         end
     end)
     row:insert(urlButton)

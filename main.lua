@@ -31,6 +31,10 @@ local function onKeyEvent(event)
         if (system.getInfo("platform") == "android") then
             -- Return the result of the try of setting the previous scene
             -- If there is a previous scene intercept the button
+            if (webView) then
+                webView:removeSelf()
+                return true
+            end
             return sceneController.setPreviousScene()
         end
     end
