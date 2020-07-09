@@ -107,7 +107,7 @@ function scene:create(event)
     sceneGroup:insert(passwordInput)
 
     local aboutText = display.newText("Aplicación no oficial de la UTCh", display.contentCenterX,
-                                      display.actualContentHeight - 30, native.systemFont, 16)
+                                      display.actualContentHeight - 26, native.systemFont, 16)
     aboutText:setFillColor(color.hex(styles.plain.white))
     sceneGroup:insert(aboutText)
 

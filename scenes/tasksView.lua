@@ -17,7 +17,7 @@ function scene:create(event)
     -- Create background
     local background = display.newRect(display.contentCenterX, display.contentCenterY,
                                        display.actualContentWidth, display.actualContentHeight)
-    background:setFillColor(color.hex(styles.plain.gray))
+    background:setFillColor(color.hex(styles.plain.white))
     sceneGroup:insert(background)
 
     local details = display.newImageRect("img/background.png", display.actualContentWidth,
