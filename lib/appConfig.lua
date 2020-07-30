@@ -10,7 +10,7 @@ local json = require("json")
 local appConfig = {}
 
 -- Create default config for the application
-local defaultConfig = {userName = nil, password = nil}
+local defaultConfig = {userName = nil, password = nil, autoLogin = false}
 
 -- Mock system lib for testing outside Solar2D
 -- This could be used to mock Solar2D libs in external unit testing!!!!!

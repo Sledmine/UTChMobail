@@ -21,13 +21,14 @@ colors.composed = {
 		over = {color.hex("#8f6900")},
 	},
 	hope = {
-		default = {color.hex("#EEEEEE")},
+		default = {color.hex("#e8e8e8")},
 		over = {color.hex("#E0E0E0")},
 	},
 }
 
 colors.plain = {
 	white = "#fafafa",
+	semigray = "#e8e8e8",
 	gray = "#263238",
 }
 

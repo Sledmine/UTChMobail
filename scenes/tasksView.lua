@@ -9,6 +9,7 @@ local TaskCard = require("components.taskCard")
 local scene = composer.newScene()
 
 function scene:create(event)
+    alreadyStarted = true
     local sceneGroup = self.view
     -- Important to set empty table by default
     local sceneParams = event.params or {}
@@ -16,23 +17,17 @@ function scene:create(event)
     -- Create background
     local background = display.newRect(display.contentCenterX, display.contentCenterY,
                                        display.actualContentWidth, display.actualContentHeight)
-    background:setFillColor(color.hex(styles.plain.white))
+    background:setFillColor(color.hex(styles.plain.semigray))
     sceneGroup:insert(background)
-
-    local details = display.newImageRect("img/background.png", display.actualContentWidth,
-                                         display.actualContentHeight)
-    details.x = display.contentCenterX
-    details.y = display.contentCenterY
-    sceneGroup:insert(details)
 
     -- table view options
     local tableView = widget.newTableView({
-        x = display.contentCenterX,
-        y = display.contentCenterY,
+        left = 0,
+        top = 0,
         width = display.actualContentWidth,
-        heigth = display.actualContentHeight,
-        onRowRender = TaskCard,
+        height = display.actualContentHeight - 50,
         hideBackground = true,
+        onRowRender = TaskCard,
     })
     sceneGroup:insert(tableView)
 

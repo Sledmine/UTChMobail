@@ -17,7 +17,8 @@ test_AppConfig = {}
 function test_AppConfig:setUp()
     self.expectedSpecificSettings = {
         userName = "test",
-        password = "123"
+        password = "123",
+        autoLogin = false
     }
 end
 

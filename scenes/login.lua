@@ -81,7 +81,7 @@ function scene:create(event)
     -- Create background
     local background = display.newRect(display.contentCenterX, display.contentCenterY,
                                        display.actualContentWidth, display.actualContentHeight)
-    background:setFillColor(color.hex(styles.plain.white))
+    background:setFillColor(color.hex(styles.plain.semigray))
     sceneGroup:insert(background)
 
     local details = display.newImageRect("img/background.png", display.actualContentWidth,
@@ -90,12 +90,12 @@ function scene:create(event)
     details.y = display.contentCenterY
     sceneGroup:insert(details)
 
-    local appIcon = display.newImageRect("img/appIcon.png", 128, 128)
+    local appIcon = display.newImageRect("img/appLogo.png", 256, 256)
     appIcon.x = display.contentCenterX
     appIcon.y = 120
     sceneGroup:insert(appIcon)
 
-    userInput = Input(display.contentCenterX, display.contentCenterY - 50, "Usuario")
+    userInput = Input(display.contentCenterX, display.contentCenterY - 60, "Usuario")
     -- Load previous user name in app config
     userInput.text = appConfig.get().userName or ""
     sceneGroup:insert(userInput)
@@ -105,8 +105,9 @@ function scene:create(event)
     passwordInput.text = appConfig.get().password or ""
     sceneGroup:insert(passwordInput)
 
-    local aboutText = display.newText("Aplicación no oficial de la UTCh", display.contentCenterX,
-                                      display.actualContentHeight - 26, native.systemFont, 16)
+    local aboutText = display.newText("¡Aplicación no oficial de la UTCh!",
+                                      display.contentCenterX, display.actualContentHeight - 26,
+                                      native.systemFont, 16)
     aboutText:setFillColor(color.hex(styles.plain.white))
     sceneGroup:insert(aboutText)
 
@@ -124,6 +125,42 @@ function scene:create(event)
     }, loginButtonHandle)
     sceneGroup:insert(loginButton)
 
+    local checkBoxBackground = display.newRoundedRect(display.contentCenterX, loginButton.y + 61,
+                                                      display.actualContentWidth - 30, 50, 3)
+    sceneGroup:insert(checkBoxBackground)
+
+    local function autoLoginHandle(event)
+        local switch = event.target
+        -- Get current app config
+        local newConfig = appConfig.get()
+
+        -- Update config fields
+        newConfig.autoLogin = switch.isOn
+
+        -- Save app config
+        appConfig.set(newConfig)
+    end
+
+    local autoLoginCheckBox = widget.newSwitch({
+        left = 20,
+        top = loginButton.y + 45,
+        style = "checkbox",
+        id = "autoLogin",
+        initialSwitchState = appConfig.get().autoLogin or false,
+        onPress = autoLoginHandle,
+    })
+    sceneGroup:insert(autoLoginCheckBox)
+
+    local autoLoginText = display.newText("Iniciar sesión automaticamente",
+                                          display.contentCenterX + 14, checkBoxBackground.y,
+                                          native.systemFont, 16)
+    autoLoginText:setFillColor(color.hex(styles.plain.gray))
+    sceneGroup:insert(autoLoginText)
+
+    if (appConfig.get().autoLogin and not alreadyStarted) then
+        utchVirtual.getToken(tokenCallback)
+    end
+    
 end
 
 -- show()
