@@ -38,7 +38,7 @@ function scene:create(event)
     }
 
     local function epochToDateString(epochDate)
-        local formattedDate = os.date("%A %d/%m/%Y %H:%M", tonumber(epochDate))
+        local formattedDate = os.date("%A %d/%m/%Y %I:%M %p", tonumber(epochDate))
         -- local formattedDate = os.date("%H:%M UTC", tonumber(epochDate))
         for dayname, translation in pairs(dayweeks) do
             if (formattedDate:find(dayname)) then
@@ -48,7 +48,7 @@ function scene:create(event)
         return formattedDate
     end
 
-    local currentDateText = display.newText(epochToDateString(os.time(os.date("!*t"))), display.contentCenterX, 20,
+    local currentDateText = display.newText(epochToDateString(os.time()), display.contentCenterX, 20,
                                             native.systemFont, 12)
     currentDateText:setFillColor(color.hex(styles.plain.white))
     sceneGroup:insert(currentDateText)

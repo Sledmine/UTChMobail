@@ -21,7 +21,7 @@ local dayweeks = {
 }
 
 local function epochToDateString(epochDate)
-    local formattedDate = os.date("%A %d/%m/%Y a las %H:%M UTC", tonumber(epochDate))
+    local formattedDate = os.date("%A %d/%m/%Y a las %I:%M %p", tonumber(epochDate))
     --local formattedDate = os.date("%H:%M UTC", tonumber(epochDate))
     for dayname, translation in pairs(dayweeks) do
         if (formattedDate:find(dayname)) then
