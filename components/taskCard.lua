@@ -24,12 +24,12 @@ local function taskCard(event)
     local taskUrl = studentTask:getLink()
     -- after the x and y params, we can define the limits of the text
     local rowTaskTitle = display.newText(row, taskTitle, display.contentCenterX, 20,
-                                         display.actualContentWidth - 30, 60, nil, 15)
+                                         display.actualContentWidth - 30, 60, nil, 14)
     rowTaskTitle:setFillColor(color.hex(styles.plain.gray))
     rowTaskTitle.anchorX = 0
     rowTaskTitle.anchorY = 0
     rowTaskTitle.x = 47
-    rowTaskTitle.y = 20
+    rowTaskTitle.y = 18
 
     local clockIcon = display.newImageRect("img/icons/school/book.png", 28, 28)
     clockIcon.x = rowTaskTitle.x - 20
@@ -37,7 +37,7 @@ local function taskCard(event)
     row:insert(clockIcon)
 
     local rowTaskDate = display.newText(row, taskDate, display.contentCenterX, 20,
-                                        display.actualContentWidth - 30, 60, nil, 15)
+                                        display.actualContentWidth - 30, 60, nil, 14)
     rowTaskDate:setFillColor(color.hex(styles.plain.gray))
     rowTaskDate.anchorX = 0
     rowTaskDate.anchorY = 0
@@ -52,13 +52,10 @@ local function taskCard(event)
     local urlButton = Button(display.contentCenterX, rowTaskDate.y + 70, "Más información",
                              "urlButton", {
         styles.composed.white,
-        styles.composed.orange,
+        styles.composed.green,
     }, function(event)
         if (event.phase == "ended") then
-
-            local webView = native.newWebView(display.contentCenterX, display.contentCenterY - 25, 320,
-                                              520)
-            webView:request(taskUrl)
+            system.openURL(taskUrl)
         end
     end)
     row:insert(urlButton)

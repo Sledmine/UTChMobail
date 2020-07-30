@@ -3,7 +3,6 @@
 -- Author: Sledmine
 -- Reusable button component
 ------------------------------------------------------------------------------
-local widget = require("widget")
 
 ---@param x number
 ---@param y number

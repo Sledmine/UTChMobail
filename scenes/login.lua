@@ -4,7 +4,6 @@
 -- Login scene for UTCh Virtual data
 ------------------------------------------------------------------------------
 local composer = require("composer")
-local widget = require("widget")
 local json = require("json")
 
 local color = require("lua-color-converter")

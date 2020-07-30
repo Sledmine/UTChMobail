@@ -3,8 +3,6 @@
 -- Author: EduRicharte
 -- Reusable tab bar component
 ------------------------------------------------------------------------------
-local widget = require("widget")
-
 -- Application libraries
 sceneController = require("lib.sceneController")
 

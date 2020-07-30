@@ -1,5 +1,4 @@
 local composer = require("composer")
-local widget = require("widget")
 
 local color = require("lua-color-converter")
 local styles = require("styles.colors")
