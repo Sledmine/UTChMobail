@@ -20,12 +20,45 @@ function scene:create(event)
     background:setFillColor(color.hex(styles.plain.semigray))
     sceneGroup:insert(background)
 
+    -- Create background
+    local currentDateBar = display.newRect(display.contentCenterX, 20, display.actualContentWidth,
+                                           40)
+    currentDateBar:setFillColor(color.hex(styles.plain.green))
+    sceneGroup:insert(currentDateBar)
+
+    --- Table dayweeks translation
+    local dayweeks = {
+        Monday = "Lunes",
+        Tuesday = "Martes",
+        Thursday = "Miercoles",
+        Wednesday = "Jueves",
+        Friday = "Viernes",
+        Saturday = "Sabado",
+        Sunday = "Domingo",
+    }
+
+    local function epochToDateString(epochDate)
+        local formattedDate = os.date("%A %d/%m/%Y %H:%M", tonumber(epochDate))
+        -- local formattedDate = os.date("%H:%M UTC", tonumber(epochDate))
+        for dayname, translation in pairs(dayweeks) do
+            if (formattedDate:find(dayname)) then
+                formattedDate = string.gsub(formattedDate, dayname, translation)
+            end
+        end
+        return formattedDate
+    end
+
+    local currentDateText = display.newText(epochToDateString(os.time(os.date("!*t"))), display.contentCenterX, 20,
+                                            native.systemFont, 12)
+    currentDateText:setFillColor(color.hex(styles.plain.white))
+    sceneGroup:insert(currentDateText)
+
     -- table view options
     local tableView = widget.newTableView({
         left = 0,
-        top = 0,
+        top = 40,
         width = display.actualContentWidth,
-        height = display.actualContentHeight - 50,
+        height = display.actualContentHeight - 90,
         hideBackground = true,
         onRowRender = TaskCard,
     })

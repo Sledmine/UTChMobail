@@ -29,6 +29,7 @@ colors.composed = {
 colors.plain = {
 	white = "#fafafa",
 	semigray = "#e8e8e8",
+	green = "#007768",
 	gray = "#263238",
 }
 
