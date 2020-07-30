@@ -3,22 +3,14 @@ getmetatable("").__add = function(a, b)
     return a .. b
 end
 
--- convert "$base" -resize 36x36!    "Icon-ldpi.png"
+local inputImage = "img\\appIcon.png"
+local backgroundColor = "#ffffff"
 
-local inputImage = "img\\appIconForeground.png"
-local magickCommand = "convert \"%s\" -resize %s! -filter triangle -unsharp 1x4 \"%s\""
+local android7Command = "convert \"%s\" -background %s -resize %s -alpha remove \"%s\""
+local android8Command = "convert \"%s\" -resize %s \"%s\""
 
--- Android output table
-local androidTable = {
-    ["36x36"] = "Icon-ldpi.png",
-    ["48x48"] = "Icon-mdpi.png",
-    ["72x72"] = "Icon-hdpi.png",
-    ["96x96"] = "Icon-xhdpi.png",
-    ["144x144"] = "Icon-xxhdpi.png",
-    ["192x192"] = "Icon-xxxhdpi.png",
-}
-
-local solar2dTable = {
+local sizeTable = {
+    ["36x36"] = "mipmap-ldpi",
     ["48x48"] = "mipmap-mdpi",
     ["72x72"] = "mipmap-hdpi",
     ["96x96"] = "mipmap-xhdpi",
@@ -26,17 +18,20 @@ local solar2dTable = {
     ["192x192"] = "mipmap-xxxhdpi",
 }
 
-for size, path in pairs(solar2dTable) do
-    local inputImageBackground = inputImage:gsub("Foreground", "Background")
-
+for size, path in pairs(sizeTable) do
     local fileName = "ic_launcher.png"
-    local outputPath = "AndroidResources\\res\\" + path + "\\" + fileName
+    local outputPath = "AndroidResources\\res\\" + path
+    os.execute("mkdir " + outputPath)
+    local output7 = outputPath + "\\" + fileName
+    local output8 = outputPath + "\\" + fileName:gsub(".png", "_foreground.png")
 
-    local foregroundCommand = magickCommand:format(inputImage, size, outputPath:gsub(fileName, "ic_launcher_foreground.png"))
-    local backgroundCommand = magickCommand:format(inputImageBackground, size, outputPath:gsub(fileName, "ic_launcher_background.png"))
-    os.execute(foregroundCommand)
-    os.execute(backgroundCommand)
+    local android7Above = android7Command:format(inputImage, backgroundColor, size, output7)
+    local android8Over = android8Command:format(inputImage, size, output8)
+    print(android7Above)
+    print(android8Over)
+    os.execute(android7Above)
+    os.execute(android8Over)
 end
 
 -- Create mini icon
-os.execute(magickCommand:format(inputImage, "57x57", "icon.png"))
+os.execute(android7Command:format(inputImage, backgroundColor, "57x57", "icon.png"))
