@@ -10,12 +10,18 @@ local android7Command = "convert \"%s\" -background %s -resize %s -alpha remove 
 local android8Command = "convert \"%s\" -resize %s \"%s\""
 
 local sizeTable = {
-    ["36x36"] = "mipmap-ldpi",
+    --[[["36x36"] = "mipmap-ldpi",
     ["48x48"] = "mipmap-mdpi",
     ["72x72"] = "mipmap-hdpi",
     ["96x96"] = "mipmap-xhdpi",
     ["144x144"] = "mipmap-xxhdpi",
-    ["192x192"] = "mipmap-xxxhdpi",
+    ["192x192"] = "mipmap-xxxhdpi",]]
+    -- Android 8 Sizes
+    ["108x108"] = "mipmap-mdpi",
+    ["162x162"] = "mipmap-hdpi",
+    ["216x216"] = "mipmap-xhdpi",
+    ["324x324"] = "mipmap-xxhdpi",
+    ["432x432"] = "mipmap-xxxhdpi"
 }
 
 for size, path in pairs(sizeTable) do
