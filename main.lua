@@ -4,6 +4,7 @@
 -- Main entry for the application
 ------------------------------------------------------------------------------
 inspect = require("inspect")
+utils = require("lib.utils")
 widget = require("widget")
 widget.setTheme("widget_theme_android_holo_dark")
 
